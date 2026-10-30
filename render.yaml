@@ -1,0 +1,24 @@
+# This prepares cloud API + PostgreSQL. Applying it can incur provider charges.
+# The inference endpoint must already exist and be reachable over HTTPS.
+services:
+  - type: web
+    name: teravs-api
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: teravs-db
+          property: connectionString
+      - key: OLLAMA_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: TERAVS_MODEL
+        value: qwen3:4b
+databases:
+  - name: teravs-db
+    plan: basic-256mb
+    databaseName: teravs
+    user: teravs

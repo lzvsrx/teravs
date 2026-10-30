@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Teravs</string>
+    <string name="title_activity_main">Teravs</string>
+    <string name="package_name">com.teravs.app</string>
+    <string name="custom_url_scheme">com.teravs.app</string>
+</resources>

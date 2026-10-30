@@ -1,0 +1,9 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+COPY server ./server
+ENV HOST=0.0.0.0 PORT=4318
+EXPOSE 4318
+USER node
+CMD ["node", "server/index.mjs"]
