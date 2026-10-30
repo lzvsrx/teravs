@@ -3,6 +3,9 @@ import { cloud } from './cloud';
 import './account.css';
 
 const REDIRECT = 'https://lzvsrx.github.io/teravs/';
+const callback = new URLSearchParams(location.hash.slice(1));
+const callbackError = callback.get('error_code') || new URLSearchParams(location.search).get('error_code') || callback.get('error');
+const pendingKey = 'teravs.pending-email';
 export function mountAccount(onSession: (session: Session | null) => void) {
   const app = document.querySelector<HTMLElement>('#app')!;
   const gate = document.createElement('main'); gate.id = 'auth-gate';
@@ -16,6 +19,17 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   document.body.prepend(gate);
   const el = <T extends HTMLElement>(s: string) => gate.querySelector<T>(s)!;
   let session: Session | null = null, recovery = false, working = false, confirmationEmail = '';
+  let setupPassword = callback.get('type') === 'magiclink';
+  try { confirmationEmail = sessionStorage.getItem(pendingKey) || ''; } catch { /* Storage can be disabled. */ }
+  function pending(email: string) { confirmationEmail = email; try { if (email) sessionStorage.setItem(pendingKey, email); else sessionStorage.removeItem(pendingKey); } catch { /* Keep this flow available without storage. */ } }
+  function failure(error: unknown) {
+    const code = (error as { code?: string })?.code;
+    if ((error as { status?: number })?.status === 429 || code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return 'Aguarde alguns minutos antes de pedir outro e-mail.';
+    if (code === 'email_address_not_authorized') return 'O serviço de e-mail ainda não permite enviar para este endereço. O administrador precisa configurar o envio no Supabase.';
+    if (code === 'email_provider_disabled' || code === 'signup_disabled') return 'O cadastro por e-mail está indisponível no serviço. Tente novamente mais tarde.';
+    if (code === 'weak_password') return 'Escolha uma senha mais forte, com letras, números e símbolos.';
+    return 'Não foi possível concluir. Verifique os dados e sua conexão e tente novamente.';
+  }
   function lock(locked: boolean) { app.hidden = locked; app.inert = locked; gate.hidden = !locked; }
   function note(text: string) { el('#account-status').textContent = text; }
   function view(name: string) {
@@ -26,7 +40,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   }
   async function run(action: () => Promise<void>) {
     if (working) return; working = true; gate.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.disabled = true);
-    try { await action(); } catch { note('Não foi possível concluir. Verifique os dados e sua conexão e tente novamente.'); }
+    try { await action(); } catch (error) { note(failure(error)); }
     finally { working = false; gate.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.disabled = false); }
   }
   function match(first: string, second: string) { const field = el<HTMLInputElement>(second); field.setCustomValidity(el<HTMLInputElement>(first).value === field.value ? '' : 'As senhas precisam ser iguais.'); return field.reportValidity(); }
@@ -34,13 +48,14 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   gate.querySelectorAll<HTMLElement>('[data-auth-go]').forEach(button => button.onclick = () => view(button.dataset.authGo!));
   el<HTMLFormElement>('#account-form').onsubmit = event => { event.preventDefault(); void run(async () => {
     note('Entrando…'); const { error } = await cloud.auth.signInWithPassword({ email: el<HTMLInputElement>('#account-email').value.trim(), password: el<HTMLInputElement>('#account-password').value });
+    if (error?.code === 'email_not_confirmed') { pending(el<HTMLInputElement>('#account-email').value.trim()); view('verify'); note('Confirme seu e-mail antes de entrar. Você pode reenviar a confirmação abaixo.'); return; }
     if (error) { note('Confira seu e-mail, senha e a confirmação do cadastro.'); return; }
     el<HTMLInputElement>('#account-password').value = '';
   }); };
   el<HTMLFormElement>('#signup-form').onsubmit = event => { event.preventDefault(); if (!match('#signup-password', '#signup-confirm')) return; void run(async () => {
     note('Criando sua conta…'); confirmationEmail = el<HTMLInputElement>('#signup-email').value.trim();
     const { data, error } = await cloud.auth.signUp({ email: confirmationEmail, password: el<HTMLInputElement>('#signup-password').value, options: { emailRedirectTo: REDIRECT, data: { display_name: el<HTMLInputElement>('#signup-name').value.trim() } } });
-    if (error) throw error; if (!data.session) { view('verify'); note('Confira seu e-mail para confirmar o cadastro.'); }
+    if (error) throw error; if (!data.session) { pending(confirmationEmail); view('verify'); note('Confira seu e-mail para confirmar o cadastro.'); }
     el<HTMLInputElement>('#signup-password').value = ''; el<HTMLInputElement>('#signup-confirm').value = '';
   }); };
   el<HTMLFormElement>('#recovery-form').onsubmit = event => { event.preventDefault(); void run(async () => {
@@ -51,7 +66,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
     const { error } = await cloud.auth.updateUser({ password: el<HTMLInputElement>('#new-password').value }); if (error) throw error;
     recovery = false; el<HTMLInputElement>('#new-password').value = ''; el<HTMLInputElement>('#new-password-confirm').value = ''; lock(!session);
   }); };
-  el('#resend-confirmation').onclick = () => void run(async () => { const { error } = await cloud.auth.resend({ type: 'signup', email: confirmationEmail, options: { emailRedirectTo: REDIRECT } }); if (error) throw error; note('Se o cadastro estiver pendente, enviaremos uma nova confirmação.'); });
+  el('#resend-confirmation').onclick = () => void run(async () => { if (!confirmationEmail) { view('login'); note('Informe seu e-mail e senha para retomar a confirmação.'); return; } const { error } = await cloud.auth.resend({ type: 'signup', email: confirmationEmail, options: { emailRedirectTo: REDIRECT } }); if (error) throw error; note('Se o cadastro estiver pendente, enviaremos uma nova confirmação. Confira também o spam.'); });
   const account = document.createElement('section'); account.id = 'account'; account.className = 'tab'; account.hidden = true;
   account.innerHTML = '<span class="eyebrow">SUA CONTA TERAVS</span><h1>Bom ter você aqui.</h1><p id="profile-email"></p><p>Suas memórias online pertencem à sua conta. Você controla o salvamento e a exclusão em Minha memória.</p><button id="account-logout">Sair da conta</button><p id="profile-status" role="status"></p>';
   app.querySelector('main')!.append(account);
@@ -60,12 +75,13 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   lock(true);
   cloud.auth.onAuthStateChange((event, next) => {
     session = next;
-    if (event === 'PASSWORD_RECOVERY') { recovery = true; view('password'); }
-    else if (!next) { recovery = false; view('login'); }
+    if (event === 'PASSWORD_RECOVERY' || (next && setupPassword)) { setupPassword = false; recovery = true; view('password'); }
+    else if (!next) { recovery = false; view(confirmationEmail ? 'verify' : 'login'); }
     onSession(next);
     account.querySelector('#profile-email')!.textContent = next?.user.email || '';
-    if (next) gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(e => e.value = '');
+    if (next) { pending(''); gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(e => e.value = ''); }
     lock(!next || recovery);
-    if (!next) note('Entre ou crie sua conta para usar o Teravs.');
+    if (!next) note(callbackError ? 'O link de confirmação ou recuperação expirou ou não é válido. Solicite um novo link.': confirmationEmail ? 'Confira seu e-mail para confirmar o cadastro. Se precisar, reenvie a confirmação.' : 'Entre ou crie sua conta para usar o Teravs.');
+    if (callbackError) history.replaceState(null, '', location.pathname);
   });
 }

@@ -27,7 +27,17 @@ Site URL: https://lzvsrx.github.io/teravs/
 Redirect URL permitida: https://lzvsrx.github.io/teravs/
 ```
 
-O cadastro solicita confirmação por e-mail. Depois da confirmação, o usuário pode entrar no site ou no aplicativo usando e-mail e senha. Nenhuma conta de teste real foi criada e nenhum e-mail foi disparado durante os testes automáticos.
+O cadastro solicita confirmação por e-mail. Depois da confirmação, o usuário pode entrar no site ou no aplicativo usando e-mail e senha. Em 30/10/2026, foi solicitado um link real para um endereço autorizado pelo proprietário; a API respondeu com sucesso, sem sessão autenticada. Isso comprova a aceitação da solicitação, mas o recebimento, o destino do link e a confirmação da conta ainda dependem de validação pelo destinatário. Nenhuma senha foi criada para esse teste: foi usado um link de acesso por e-mail. Ao retornar com um link do tipo `magiclink`, o aplicativo pede que a pessoa escolha sua senha.
+
+O reenvio preserva somente o e-mail pendente no armazenamento da aba, inclusive após recarregar. Uma sessão autenticada remove essa informação. Links expirados mostram uma mensagem e têm os parâmetros removidos da URL; limites de envio mostram uma orientação para aguardar. O SDK oficial processa os links de confirmação e recuperação.
+
+O destinatário confirmou o recebimento do e-mail de teste, mas informou que o link levou a `localhost:3000`. Portanto, o retorno online não está validado: é necessário salvar as URLs acima no painel administrativo e solicitar um novo link. O aplicativo já envia o endereço publicado como `emailRedirectTo`; a configuração do serviço precisa aceitá-lo. Links antigos podem conservar o destino anterior.
+
+### Entrega de e-mail em produção
+
+Segundo a [documentação oficial de SMTP](https://supabase.com/docs/guides/auth/auth-smtp), o remetente padrão tem restrições de destinatários e limites baixos; configure SMTP próprio para cadastro público. Não foi possível inspecionar nem alterar o SMTP, os templates ou a lista de redirecionamentos deste projeto usando a chave pública. O sucesso de uma solicitação para um destinatário não comprova envio para todos os usuários.
+
+No painel Authentication, configure um provedor SMTP com domínio/remetente verificado, mantenha a confirmação de e-mail habilitada e confira os limites de envio. Use `{{ .ConfirmationURL }}` nos botões dos templates de confirmação e recuperação, preservando o tipo do link. Nunca substitua o link por uma URL fixa do site: isso não confirma a conta. Consulte [templates](https://supabase.com/docs/guides/auth/auth-email-templates) e [redirecionamentos](https://supabase.com/docs/guides/auth/redirect-urls).
 
 O formulário inicial permite entrar, criar conta com confirmação de senha, reenviar a confirmação e recuperar a senha. O link de recuperação abre a tela para escolher e confirmar uma nova senha. Sem login, a interface fica oculta e inativa; a API rejeita requisições de convidados à IA e às memórias.
 
