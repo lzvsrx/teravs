@@ -10,4 +10,6 @@ Windows requer Ollama com qwen3:4b instalado e em execução. O modelo não foi 
 
 O APK é uma compilação de depuração. O serviço remoto ainda precisa ser publicado no Render e configurado em uma nova compilação para permitir conversar no Android e no site. GitHub Pages hospeda apenas a interface.
 
+O pacote Windows foi gerado, mas sua execução final foi bloqueada pelo Device Guard deste computador. O aplicativo iniciado pelo ambiente de desenvolvimento funcionou. Não há assinatura de código do Windows nesta prévia.
+
 Vídeos, música, fotos realistas e Libras ainda não estão implementados. Não há validação de todas as profissões ou deficiências.
