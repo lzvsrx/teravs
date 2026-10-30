@@ -84,6 +84,10 @@ mountAccount(session=>{
  const next=session?.user.id||null;
  if(next!==historyOwner){controller?.abort();localStorage.setItem(historyKey(),JSON.stringify(messages));historyOwner=next;messages=read<Message[]>(historyKey(),[]);render();$('#memory-list').replaceChildren();$('#memory-status').textContent='';$<HTMLTextAreaElement>('#memory-content').value='';}
  useMemory=next?read('teravs.useMemory.'+next,false):false;$<HTMLInputElement>('#remember').checked=useMemory;
+},()=>{
+ tab('chat');
+ if(location.protocol==='https:'||location.protocol==='http:')history.replaceState(null,'',location.pathname+'?view=chat');
+ $('#prompt').focus();
 });
 mountCredits();
 mountLanguage();

@@ -36,7 +36,10 @@ for (const launch of ['hot','cold','recovery']) test(`Android PKCE: confirmaçã
     await page.locator('#show-signup').click();await page.locator('#signup-name').fill('Teste nativo');await page.locator('#signup-email').fill('native@example.invalid');await page.locator('#signup-password').fill('senha-de-teste');await page.locator('#signup-confirm').fill('senha-de-teste');await page.locator('#account-signup').click();
     await expect(page.locator('#account-status')).toContainText('Confira seu e-mail');
   }
-  expect(redirect).toMatch(/^teravs:\/\/auth\/callback(?:\?sb_flow_id=[a-zA-Z0-9_-]+)?$/);
+  expect(new URL(redirect).origin).toBe('null');
+  expect(new URL(redirect).host).toBe('auth');
+  expect(new URL(redirect).pathname).toBe('/callback');
+  expect(new URL(redirect).searchParams.get('view')).toBe('chat');
   const callback=new URL(redirect);callback.searchParams.set('code','test-authorization-code');
   if(launch==='cold'){
     await page.evaluate(url=>sessionStorage.setItem('test.launch',url),callback.href);await page.reload();
@@ -47,6 +50,8 @@ for (const launch of ['hot','cold','recovery']) test(`Android PKCE: confirmaçã
     await page.locator('#new-password').fill('nova-senha-teste');await page.locator('#new-password-confirm').fill('nova-senha-teste');await page.locator('#password-form button').click();
   }
   await expect(page.locator('#auth-gate')).toBeHidden();expect(exchanges).toBe(1);
+  await expect(page.locator('#chat')).toBeVisible();
+  expect(new URL(page.url()).searchParams.get('view')).toBe('chat');
   if(launch==='hot'){
     await page.evaluate(url=>(window as any).nativeAuthCallback({url}),callback.href);
     await expect(page.locator('#profile-status')).toHaveText('Link confirmado neste aplicativo.');expect(exchanges).toBe(1);

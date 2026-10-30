@@ -8,7 +8,7 @@ const REDIRECT = authRedirect;
 const callback = new URLSearchParams(location.hash.slice(1));
 const callbackError = callback.get('error_code') || new URLSearchParams(location.search).get('error_code') || callback.get('error');
 const pendingKey = 'teravs.pending-email';
-export function mountAccount(onSession: (session: Session | null) => void) {
+export function mountAccount(onSession: (session: Session | null) => void, onAuthenticated: () => void = () => {}) {
   const app = document.querySelector<HTMLElement>('#app')!;
   const gate = document.createElement('main'); gate.id = 'auth-gate';
   gate.innerHTML = `<div class="auth-layout"><section class="auth-story"><a class="brand" href="#">✦ teravs</a><div class="elo" role="img" aria-label="Elo, companheiro do Teravs"><span>••</span></div><span class="eyebrow">INTELIGÊNCIA QUE INCLUI</span><h1>Seu próximo passo<br>começa aqui.</h1><p>Um espaço para aprender, criar e trabalhar.<br>Com suas preferências e no seu ritmo.</p><ul><li>Textos, código e ilustrações vetoriais</li><li>Memórias que você escolhe salvar</li><li>Acessibilidade para diferentes necessidades</li></ul><small>O Teravs pode errar. Confira informações importantes.</small></section><section class="auth-card" aria-labelledby="auth-title"><span class="eyebrow">BEM-VINDO AO TERAVS</span><h2 id="auth-title">Entre na sua conta.</h2><p id="auth-description">Use seu e-mail e senha para acessar a IA.</p><p id="account-status" role="status">Verificando sua sessão…</p>
@@ -71,7 +71,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   }); };
   el<HTMLFormElement>('#password-form').onsubmit = event => { event.preventDefault(); if (!match('#new-password', '#new-password-confirm')) return; void run(async () => {
     const { error } = await cloud.auth.updateUser({ password: el<HTMLInputElement>('#new-password').value }); if (error) throw error;
-    recovery = false; el<HTMLInputElement>('#new-password').value = ''; el<HTMLInputElement>('#new-password-confirm').value = ''; lock(!session);
+    recovery = false; el<HTMLInputElement>('#new-password').value = ''; el<HTMLInputElement>('#new-password-confirm').value = ''; lock(!session); if (session) onAuthenticated();
   }); };
   el('#resend-confirmation').onclick = () => void run(async () => { if (!confirmationEmail) { view('login'); note('Informe seu e-mail e senha para retomar a confirmação.'); return; } const { error } = await cloud.auth.resend({ type: 'signup', email: confirmationEmail, options: { emailRedirectTo: REDIRECT } }); if (error) throw error; note('Se o cadastro estiver pendente, enviaremos uma nova confirmação. Confira também o spam.'); });
   el('#confirmation-login').onclick = () => { view('login'); el<HTMLInputElement>('#account-email').value = confirmationEmail; el<HTMLInputElement>('#account-password').focus(); };
@@ -89,6 +89,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
     account.querySelector('#profile-email')!.textContent = next?.user.email || '';
     if (next) { pending(''); gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(e => e.value = ''); }
     lock(!next || recovery);
+    if (next && !recovery && event === 'SIGNED_IN') onAuthenticated();
     if (!next) note(callbackError ? 'O link de confirmação ou recuperação expirou ou não é válido. Solicite um novo link.': confirmationEmail ? 'Confira seu e-mail para confirmar o cadastro. Se precisar, reenvie a confirmação.' : 'Entre ou crie sua conta para usar o Teravs.');
     if (callbackError) history.replaceState(null, '', location.pathname);
   });

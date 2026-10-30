@@ -4,8 +4,8 @@ import { cloud } from './cloud';
 import { createAuthReturn, type AuthReturnState } from './auth-return';
 
 export const authRedirect = Capacitor.isNativePlatform()
-  ? 'teravs://auth/callback'
-  : 'https://lzvsrx.github.io/teravs/';
+  ? 'teravs://auth/callback?view=chat'
+  : 'https://lzvsrx.github.io/teravs/?view=chat';
 
 export async function mountNativeAuth(notify: (state: AuthReturnState, message: string) => void) {
   if (!Capacitor.isNativePlatform()) return;

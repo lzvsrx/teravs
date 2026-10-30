@@ -116,4 +116,15 @@ test('link de recuperação abre nova senha e só libera a IA após salvar',asyn
  await expect(page.locator('#password-form')).toBeVisible();await expect(page.locator('#app')).toBeHidden();
  await page.locator('#new-password').fill('nova-senha-teste');await page.locator('#new-password-confirm').fill('nova-senha-teste');await page.locator('#password-form button').click();
  await expect(page.locator('#app')).toBeVisible();expect(updated).toBeTruthy();
+  await expect(page.locator('#chat')).toBeVisible();
+  expect(new URL(page.url()).searchParams.get('view')).toBe('chat');
+});
+
+test('confirmação no site abre a página principal sem manter tokens na URL',async({page})=>{
+ const uid='eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+ const jwt=['eyJhbGciOiJIUzI1NiJ9',Buffer.from(JSON.stringify({sub:uid,exp:Math.floor(Date.now()/1000)+3600})).toString('base64url'),'test'].join('.');
+ await page.route('**/auth/v1/user*',route=>route.fulfill({json:{id:uid,email:'confirmed@example.invalid',aud:'authenticated',role:'authenticated'}}));
+ await page.goto('/?view=chat#access_token='+jwt+'&refresh_token=fake-refresh&expires_in=3600&token_type=bearer&type=signup');
+ await expect(page.locator('#auth-gate')).toBeHidden();await expect(page.locator('#chat')).toBeVisible();
+ expect(new URL(page.url()).searchParams.get('view')).toBe('chat');expect(new URL(page.url()).hash).toBe('');
 });

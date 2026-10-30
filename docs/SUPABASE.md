@@ -23,8 +23,9 @@ O SQL cria uma tabela separada, sem importar ou apagar registros anteriores. Inc
 Em Authentication → URL Configuration, configure:
 
 ```text
-Site URL: https://lzvsrx.github.io/teravs/
+Site URL: https://lzvsrx.github.io/teravs/?view=chat
 Redirect URL permitida: https://lzvsrx.github.io/teravs/
+                       https://lzvsrx.github.io/teravs/?view=chat
 Redirect URLs Android: teravs://auth/callback
                        teravs://auth/callback?**
 ```
@@ -39,7 +40,9 @@ O Android recebe `teravs://auth/callback` por um intent BROWSABLE restrito ao ho
 
 A recuperação mantém o formulário de nova senha até salvar. Se o link for aberto em outro aparelho ou em uma instalação que não tem o verificador, o aplicativo orienta a voltar ao aparelho de origem ou entrar com senha depois de confirmar o e-mail. Links antigos podem continuar abrindo o site: o botão **Já confirmei: entrar com minha senha** preenche o e-mail pendente e permite concluir o login no app, inclusive no Windows. Para testar o novo retorno, peça uma nova confirmação na versão atualizada do Android e abra no mesmo aparelho; não reutilize um link antigo ou já consumido.
 
-As URLs Android foram aplicadas ao projeto Supabase online. O Site URL continua sendo o site publicado. Os testes automatizados verificam a troca PKCE real do SDK contra respostas simuladas, a correlação do verificador SHA-256, início a frio, app aberto, recuperação, ausência de verificador, destino inválido e deduplicação. Isso não comprova recebimento de um novo e-mail real.
+As URLs Android foram aplicadas ao projeto Supabase online. O destino solicitado pelo Android é `teravs://auth/callback?view=chat`; no site é `https://lzvsrx.github.io/teravs/?view=chat`, também configurado como Site URL. Após autenticação validada, a tela principal de conversa é selecionada e os parâmetros sensíveis são removidos da URL visível. A recuperação só abre essa tela depois de salvar a nova senha. O parâmetro `view=chat` não permite contornar o login.
+
+Os testes automatizados verificam a troca PKCE real do SDK contra respostas simuladas, a correlação do verificador SHA-256, início a frio, app aberto, recuperação, ausência de verificador, destino inválido e deduplicação. Isso não comprova recebimento de um novo e-mail real.
 
 Uma tentativa de configurar confirmação por código foi recusada pelo serviço com HTTP 400: alteração de template exige SMTP próprio ou upgrade no projeto gratuito com remetente padrão. O template não foi aplicado e a interface não oferece um campo de código que o e-mail atual não entrega. A correção usa o link padrão, sem desativar confirmação, mudar plano ou aumentar limites de envio.
 
