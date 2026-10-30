@@ -25,11 +25,23 @@ Em Authentication → URL Configuration, configure:
 ```text
 Site URL: https://lzvsrx.github.io/teravs/
 Redirect URL permitida: https://lzvsrx.github.io/teravs/
+Redirect URLs Android: teravs://auth/callback
+                       teravs://auth/callback?**
 ```
 
 O cadastro solicita confirmação por e-mail. Depois da confirmação, o usuário pode entrar no site ou no aplicativo usando e-mail e senha. Em 30/10/2026, foi solicitado um link real para um endereço autorizado pelo proprietário; a API respondeu com sucesso, sem sessão autenticada. Isso comprova a aceitação da solicitação, mas o recebimento, o destino do link e a confirmação da conta ainda dependem de validação pelo destinatário. Nenhuma senha foi criada para esse teste: foi usado um link de acesso por e-mail. Ao retornar com um link do tipo `magiclink`, o aplicativo pede que a pessoa escolha sua senha.
 
-O reenvio preserva somente o e-mail pendente no armazenamento da aba, inclusive após recarregar. Uma sessão autenticada remove essa informação. Links expirados mostram uma mensagem e têm os parâmetros removidos da URL; limites de envio mostram uma orientação para aguardar. O SDK oficial processa os links de confirmação e recuperação.
+O aplicativo preserva somente o e-mail pendente no armazenamento local, inclusive ao fechar e abrir novamente. Uma sessão autenticada remove essa informação; senha e link de confirmação não são guardados por esse fluxo. Links expirados mostram uma mensagem e têm os parâmetros removidos da URL; limites de envio mostram uma orientação para aguardar. O SDK oficial processa os links de confirmação e recuperação.
+
+### Retorno ao aplicativo Android
+
+O Android recebe `teravs://auth/callback` por um intent BROWSABLE restrito ao host e caminho declarados. O plugin oficial `@capacitor/app` entrega links tanto com o processo aberto quanto no início. Cadastro, reenvio e recuperação solicitados no Android usam esse retorno, com PKCE e verificador mantido pelo SDK oficial. O código recebido pelo link só cria sessão após a troca validada no Supabase; não são aceitos access tokens ou refresh tokens fornecidos no fragmento do deep link. O handler deduplica os dois eventos possíveis do mesmo link, valida o destino exato e não imprime o código.
+
+A recuperação mantém o formulário de nova senha até salvar. Se o link for aberto em outro aparelho ou em uma instalação que não tem o verificador, o aplicativo orienta a voltar ao aparelho de origem ou entrar com senha depois de confirmar o e-mail. Links antigos podem continuar abrindo o site: o botão **Já confirmei: entrar com minha senha** preenche o e-mail pendente e permite concluir o login no app, inclusive no Windows. Para testar o novo retorno, peça uma nova confirmação na versão atualizada do Android e abra no mesmo aparelho; não reutilize um link antigo ou já consumido.
+
+As URLs Android foram aplicadas ao projeto Supabase online. O Site URL continua sendo o site publicado. Os testes automatizados verificam a troca PKCE real do SDK contra respostas simuladas, a correlação do verificador SHA-256, início a frio, app aberto, recuperação, ausência de verificador, destino inválido e deduplicação. Isso não comprova recebimento de um novo e-mail real.
+
+Uma tentativa de configurar confirmação por código foi recusada pelo serviço com HTTP 400: alteração de template exige SMTP próprio ou upgrade no projeto gratuito com remetente padrão. O template não foi aplicado e a interface não oferece um campo de código que o e-mail atual não entrega. A correção usa o link padrão, sem desativar confirmação, mudar plano ou aumentar limites de envio.
 
 O destinatário confirmou o recebimento do e-mail de teste, mas informou que o link levou a `localhost:3000`. Após autenticação administrativa pelo fluxo oficial do Supabase CLI, as duas URLs acima foram aplicadas ao projeto online. A comparação posterior confirmou zero alterações pendentes nesses dois campos, preservando a confirmação obrigatória e as demais configurações. Um novo pedido de e-mail foi bloqueado com HTTP 429 (`over_email_send_rate_limit`); a navegação completa por um link novo continua pendente. Links antigos podem conservar o destino anterior.
 

@@ -243,5 +243,11 @@
 "Confirmez l'enregistrement d'un souvenir de 2 000 caractères maximum.",
 "Limite de 100 souvenirs. Supprimez-en avant d'enregistrer.",
 "Conversation ou mode de création invalide.",
-"Conversation trop longue. Commencez une nouvelle conversation."
+"Conversation trop longue. Commencez une nouvelle conversation.",
+"Ouvrez le lien de l'e-mail sur cet appareil. Sur Android, il peut ouvrir Teravs pour terminer la confirmation. Si vous avez confirmé dans le navigateur, revenez vous connecter avec votre mot de passe.",
+"Déjà confirmé : me connecter avec mon mot de passe",
+"Confirmation de votre adresse e-mail dans l'application…",
+"Lien confirmé dans cette application.",
+"Impossible de terminer avec le lien. Utilisez l'application où vous avez demandé la confirmation ou connectez-vous avec votre mot de passe après avoir confirmé votre adresse e-mail.",
+"Impossible de recevoir le lien de confirmation. Essayez de vous connecter avec votre mot de passe après avoir confirmé votre adresse e-mail."
 ]

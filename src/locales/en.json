@@ -243,5 +243,11 @@
 "Confirm saving a memory of up to 2,000 characters.",
 "Limit of 100 memories. Delete some before saving.",
 "Invalid conversation or creation mode.",
-"Conversation too long. Start a new conversation."
+"Conversation too long. Start a new conversation.",
+"Open the email link on this device. On Android, it can open Teravs to finish confirmation. If you confirmed in the browser, return and sign in with your password.",
+"Already confirmed: sign in with my password",
+"Confirming your email in the app…",
+"Link confirmed in this app.",
+"Could not complete through the link. Use the app where you requested confirmation, or sign in with your password after confirming your email.",
+"Could not receive the confirmation link. Try signing in with your password after confirming your email."
 ]

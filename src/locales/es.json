@@ -243,5 +243,11 @@
 "Confirma el guardado de un recuerdo de hasta 2.000 caracteres.",
 "Límite de 100 recuerdos. Borra algunos antes de guardar.",
 "Conversación o modo de creación no válido.",
-"Conversación demasiado larga. Inicia una nueva conversación."
+"Conversación demasiado larga. Inicia una nueva conversación.",
+"Abre el enlace del correo en este dispositivo. En Android puede abrir Teravs para completar la confirmación. Si confirmaste en el navegador, vuelve y entra con tu contraseña.",
+"Ya confirmé: entrar con mi contraseña",
+"Confirmando tu correo en la aplicación…",
+"Enlace confirmado en esta aplicación.",
+"No se pudo completar mediante el enlace. Usa la aplicación donde solicitaste la confirmación o entra con tu contraseña después de confirmar tu correo.",
+"No se pudo recibir el enlace de confirmación. Intenta entrar con tu contraseña después de confirmar tu correo."
 ]

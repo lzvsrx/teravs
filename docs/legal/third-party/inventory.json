@@ -11,6 +11,14 @@
       ]
     },
     {
+      "name": "@capacitor/app",
+      "version": "8.1.2",
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "_capacitor_app-8.1.2-LICENSE"
+      ]
+    },
+    {
       "name": "@capacitor/core",
       "version": "8.6.0",
       "declaredLicense": "MIT",

@@ -9,6 +9,7 @@ Coleta: 30/10/2026. Licenças declaradas no package-lock.json; cópias de arquiv
 | Pacote | Versão | Licença declarada | Avisos preservados |
 |---|---|---|---|
 | @capacitor/android | 8.6.0 | MIT | [_capacitor_android-8.6.0-LICENSE](docs/legal/third-party/_capacitor_android-8.6.0-LICENSE) |
+| @capacitor/app | 8.1.2 | MIT | [_capacitor_app-8.1.2-LICENSE](docs/legal/third-party/_capacitor_app-8.1.2-LICENSE) |
 | @capacitor/core | 8.6.0 | MIT | [_capacitor_core-8.6.0-LICENSE](docs/legal/third-party/_capacitor_core-8.6.0-LICENSE) |
 | @supabase/auth-js | 2.118.0 | MIT | [_supabase_auth-js-2.118.0-LICENSE](docs/legal/third-party/_supabase_auth-js-2.118.0-LICENSE) |
 | @supabase/functions-js | 2.118.0 | MIT | [_supabase_functions-js-2.118.0-LICENSE](docs/legal/third-party/_supabase_functions-js-2.118.0-LICENSE) |

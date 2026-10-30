@@ -2,8 +2,9 @@ import type { Session } from '@supabase/supabase-js';
 import { cloud } from './cloud';
 import './account.css';
 import { t } from './i18n';
+import { authRedirect, mountNativeAuth } from './native-auth';
 
-const REDIRECT = 'https://lzvsrx.github.io/teravs/';
+const REDIRECT = authRedirect;
 const callback = new URLSearchParams(location.hash.slice(1));
 const callbackError = callback.get('error_code') || new URLSearchParams(location.search).get('error_code') || callback.get('error');
 const pendingKey = 'teravs.pending-email';
@@ -14,15 +15,20 @@ export function mountAccount(onSession: (session: Session | null) => void) {
   <form id="account-form" data-auth-view="login"><label for="account-email">E-mail</label><input id="account-email" type="email" autocomplete="email" required maxlength="254" placeholder="voce@exemplo.com"><label for="account-password">Senha</label><input id="account-password" type="password" autocomplete="current-password" required maxlength="128"><button id="account-login" class="primary" type="submit">Entrar</button><button type="button" data-auth-go="recovery" class="auth-link">Esqueci minha senha</button><p class="auth-switch">Primeira vez por aqui? <button id="show-signup" type="button" data-auth-go="signup" class="auth-link">Criar conta</button></p></form>
   <form id="signup-form" data-auth-view="signup" hidden><label for="signup-name">Seu nome</label><input id="signup-name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Como podemos chamar você?"><label for="signup-email">E-mail</label><input id="signup-email" type="email" autocomplete="email" required maxlength="254"><label for="signup-password">Crie uma senha</label><input id="signup-password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" aria-describedby="password-help"><small id="password-help">Use pelo menos 8 caracteres.</small><label for="signup-confirm">Confirme a senha</label><input id="signup-confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><button id="account-signup" class="primary" type="submit">Criar minha conta</button><p class="auth-switch">Já tem uma conta? <button type="button" data-auth-go="login" class="auth-link">Entrar</button></p><small>O cadastro não ativa a memória. Você escolhe o que o Teravs pode guardar depois de entrar.</small></form>
   <form id="recovery-form" data-auth-view="recovery" hidden><label for="recovery-email">E-mail da sua conta</label><input id="recovery-email" type="email" autocomplete="email" required maxlength="254"><button class="primary" type="submit">Enviar link de recuperação</button><button type="button" data-auth-go="login" class="auth-link">Voltar para o login</button></form>
-  <div data-auth-view="verify" hidden><p>Confirme o cadastro no seu e-mail. Depois, volte e entre com sua senha.</p><button id="resend-confirmation">Reenviar confirmação</button><button type="button" data-auth-go="login" class="primary">Voltar para o login</button></div>
+  <div data-auth-view="verify" hidden><p>Abra o link do e-mail neste aparelho. No Android, ele pode abrir o Teravs para concluir a confirmação. Se confirmou no navegador, volte e entre com sua senha.</p><button id="resend-confirmation">Reenviar confirmação</button><button id="confirmation-login" type="button" class="primary">Já confirmei: entrar com minha senha</button></div>
   <form id="password-form" data-auth-view="password" hidden><label for="new-password">Nova senha</label><input id="new-password" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><label for="new-password-confirm">Confirme a nova senha</label><input id="new-password-confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><button class="primary" type="submit">Salvar nova senha</button></form>
   </section></div>`;
   document.body.prepend(gate);
   const el = <T extends HTMLElement>(s: string) => gate.querySelector<T>(s)!;
   let session: Session | null = null, recovery = false, working = false, confirmationEmail = '';
   let setupPassword = callback.get('type') === 'magiclink';
-  try { confirmationEmail = sessionStorage.getItem(pendingKey) || ''; } catch { /* Storage can be disabled. */ }
-  function pending(email: string) { confirmationEmail = email; try { if (email) sessionStorage.setItem(pendingKey, email); else sessionStorage.removeItem(pendingKey); } catch { /* Keep this flow available without storage. */ } }
+  try { confirmationEmail = localStorage.getItem(pendingKey) || sessionStorage.getItem(pendingKey) || ''; } catch { /* Storage can be disabled. */ }
+  function pending(email: string) {
+    confirmationEmail = email;
+    for (const storage of ['localStorage', 'sessionStorage'] as const) try {
+      if (email) window[storage].setItem(pendingKey, email); else window[storage].removeItem(pendingKey);
+    } catch { /* Keep this flow available without storage. */ }
+  }
   function failure(error: unknown) {
     const code = (error as { code?: string })?.code;
     if ((error as { status?: number })?.status === 429 || code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return 'Aguarde alguns minutos antes de pedir outro e-mail.';
@@ -68,6 +74,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
     recovery = false; el<HTMLInputElement>('#new-password').value = ''; el<HTMLInputElement>('#new-password-confirm').value = ''; lock(!session);
   }); };
   el('#resend-confirmation').onclick = () => void run(async () => { if (!confirmationEmail) { view('login'); note('Informe seu e-mail e senha para retomar a confirmação.'); return; } const { error } = await cloud.auth.resend({ type: 'signup', email: confirmationEmail, options: { emailRedirectTo: REDIRECT } }); if (error) throw error; note('Se o cadastro estiver pendente, enviaremos uma nova confirmação. Confira também o spam.'); });
+  el('#confirmation-login').onclick = () => { view('login'); el<HTMLInputElement>('#account-email').value = confirmationEmail; el<HTMLInputElement>('#account-password').focus(); };
   const account = document.createElement('section'); account.id = 'account'; account.className = 'tab'; account.hidden = true;
   account.innerHTML = '<span class="eyebrow">SUA CONTA TERAVS</span><h1>Bom ter você aqui.</h1><p id="profile-email"></p><p>Suas memórias online pertencem à sua conta. Você controla o salvamento e a exclusão em Minha memória.</p><button id="account-logout">Sair da conta</button><p id="profile-status" role="status"></p>';
   app.querySelector('main')!.append(account);
@@ -85,4 +92,8 @@ export function mountAccount(onSession: (session: Session | null) => void) {
     if (!next) note(callbackError ? 'O link de confirmação ou recuperação expirou ou não é válido. Solicite um novo link.': confirmationEmail ? 'Confira seu e-mail para confirmar o cadastro. Se precisar, reenvie a confirmação.' : 'Entre ou crie sua conta para usar o Teravs.');
     if (callbackError) history.replaceState(null, '', location.pathname);
   });
+  void mountNativeAuth((state, message) => {
+    if (state === 'error' && !session) { recovery = false; view('login'); el<HTMLInputElement>('#account-email').value = confirmationEmail; }
+    note(message); account.querySelector('#profile-status')!.textContent = message;
+  }).catch(() => note('Não foi possível receber o link de confirmação. Tente entrar com sua senha depois de confirmar o e-mail.'));
 }

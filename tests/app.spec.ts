@@ -54,11 +54,14 @@ test('cadastro solicita confirmação por e-mail sem gravar a senha',async({page
   await page.locator('#show-signup').click();await page.locator('#signup-name').fill('Pessoa de teste');await page.locator('#signup-email').fill('novo@example.invalid');await page.locator('#signup-password').fill('senha-de-teste');await page.locator('#signup-confirm').fill('senha-de-teste');await page.locator('#account-signup').click();
   await expect(page.locator('#account-status')).toContainText('Confira seu e-mail');await expect(page.locator('#signup-password')).toHaveValue('');
   expect(await page.evaluate(()=>JSON.stringify(localStorage))).not.toContain('senha-de-teste');
-  await page.reload();
+  await page.evaluate(()=>sessionStorage.clear());await page.reload();
   await expect(page.locator('[data-auth-view="verify"]')).toBeVisible();
   await page.route('**/auth/v1/resend*', route => route.fulfill({status:429,json:{code:'over_email_send_rate_limit',msg:'rate limit'}}));
   await page.locator('#resend-confirmation').click();
   await expect(page.locator('#account-status')).toContainText('Aguarde alguns minutos');
+  await page.locator('#confirmation-login').click();
+  await expect(page.locator('#account-email')).toHaveValue('novo@example.invalid');
+  await expect(page.locator('#account-password')).toHaveValue('');
 });
 
 test('link expirado informa o problema, limpa a URL e mantém a IA bloqueada',async({page})=>{

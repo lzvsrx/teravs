@@ -243,5 +243,11 @@
   "Confirme o salvamento de uma memória de até 2.000 caracteres.",
   "Limite de 100 memórias. Apague algumas antes de salvar.",
   "Conversa ou modo de criação inválido.",
-  "Conversa muito longa. Inicie uma nova conversa."
+  "Conversa muito longa. Inicie uma nova conversa.",
+  "Abra o link do e-mail neste aparelho. No Android, ele pode abrir o Teravs para concluir a confirmação. Se confirmou no navegador, volte e entre com sua senha.",
+  "Já confirmei: entrar com minha senha",
+  "Confirmando seu e-mail no aplicativo…",
+  "Link confirmado neste aplicativo.",
+  "Não foi possível concluir pelo link. Use o aplicativo onde pediu a confirmação ou entre com sua senha após confirmar o e-mail.",
+  "Não foi possível receber o link de confirmação. Tente entrar com sua senha depois de confirmar o e-mail."
 ]
