@@ -58,7 +58,8 @@ test('cadastro solicita confirmação por e-mail sem gravar a senha',async({page
   await expect(page.locator('[data-auth-view="verify"]')).toBeVisible();
   await page.route('**/auth/v1/resend*', route => route.fulfill({status:429,json:{code:'over_email_send_rate_limit',msg:'rate limit'}}));
   await page.locator('#resend-confirmation').click();
-  await expect(page.locator('#account-status')).toContainText('Aguarde alguns minutos');
+  await expect(page.locator('#account-status')).toContainText('limite de envio de e-mails');
+  await expect(page.locator('#confirmation-address')).toHaveText('novo@example.invalid');
   await page.locator('#confirmation-login').click();
   await expect(page.locator('#account-email')).toHaveValue('novo@example.invalid');
   await expect(page.locator('#account-password')).toHaveValue('');

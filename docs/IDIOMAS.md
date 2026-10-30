@@ -13,7 +13,7 @@ O seletor 🌐 Idioma está disponível antes e depois do login. A opção padr�
 | Árabe | ar | Direita para a esquerda |
 | Chinês simplificado | zh-Hans | Esquerda para a direita |
 
-Cada catálogo cobre as mesmas 251 entradas: telas, formulários, erros, avisos, acessibilidade, créditos, exemplos, instruções iniciais e textos dinâmicos. As traduções foram preparadas com assistência de IA; cobertura automatizada não equivale a revisão por tradutores nativos ou validação jurídica. As línguas listadas são as efetivamente incluídas, não uma afirmação de suporte a todas as línguas do mundo.
+Cada catálogo cobre as mesmas 255 entradas: telas, formulários, erros, avisos, acessibilidade, créditos, exemplos, instruções iniciais e textos dinâmicos. As traduções foram preparadas com assistência de IA; cobertura automatizada não equivale a revisão por tradutores nativos ou validação jurídica. As línguas listadas são as efetivamente incluídas, não uma afirmação de suporte a todas as línguas do mundo.
 
 Os catálogos ficam em `src/locales`, com `source.json` em português e arquivos alinhados por posição. Ao adicionar uma entrada ou reordenar o catálogo, atualize todos os arquivos. Os testes verificam o tamanho, parâmetros, mudança de idioma, retorno ao português, persistência, texto pessoal e layout móvel em árabe. Não há download de tradução para esses seis idiomas. A autenticação e a IA continuam dependendo dos serviços correspondentes.
 
@@ -21,7 +21,7 @@ Os catálogos ficam em `src/locales`, com `source.json` em português e arquivos
 
 A interface também oferece idiomas adicionais pela [Translator API do navegador](https://developer.chrome.com/docs/ai/translator-api). A disponibilidade é consultada no aparelho; pares sem suporte não são tratados como traduzidos. Essa API tem disponibilidade limitada e, segundo a documentação consultada em 30/10/2026, não atende Android/iOS. O aplicativo Android mantém os seis catálogos incluídos.
 
-O usuário inicia a tradução pelo botão Aplicar idioma. O navegador pode precisar baixar modelos. Somente as 251 frases públicas do catálogo são passadas ao tradutor local: conversas, memórias, e-mail, senha e outros campos não entram nessa operação. O resultado completo é aplicado de uma vez, como texto, e pode ser guardado localmente para reutilização. O cache é invalidado quando o catálogo de origem muda. Em falha, a interface anterior é preservada. Não há serviço externo pago configurado ou chave de tradução no aplicativo.
+O usuário inicia a tradução pelo botão Aplicar idioma. O navegador pode precisar baixar modelos. Somente as 255 frases públicas do catálogo são passadas ao tradutor local: conversas, memórias, e-mail, senha e outros campos não entram nessa operação. O resultado completo é aplicado de uma vez, como texto, e pode ser guardado localmente para reutilização. O cache é invalidado quando o catálogo de origem muda. Em falha, a interface anterior é preservada. Não há serviço externo pago configurado ou chave de tradução no aplicativo.
 
 As opções adicionais não garantem disponibilidade para todo idioma, dialeto, escrita ou língua de sinais. Oferecer um código na lista não comprova suporte pelo navegador. Catálogos novos podem ser incluídos sem depender dessa API.
 

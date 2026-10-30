@@ -249,5 +249,9 @@
 "Confirming your email in the app…",
 "Link confirmed in this app.",
 "Could not complete through the link. Use the app where you requested confirmation, or sign in with your password after confirming your email.",
-"Could not receive the confirmation link. Try signing in with your password after confirming your email."
+"Could not receive the confirmation link. Try signing in with your password after confirming your email.",
+"The email sending limit has been reached. Try again later. If you already confirmed your email, sign in with your password.",
+"Check your email. If your account is already confirmed, sign in with your password; registering again does not send another confirmation.",
+"Correct registration email",
+"Confirm your email, or sign in if it is already confirmed."
 ]

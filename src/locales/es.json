@@ -249,5 +249,9 @@
 "Confirmando tu correo en la aplicación…",
 "Enlace confirmado en esta aplicación.",
 "No se pudo completar mediante el enlace. Usa la aplicación donde solicitaste la confirmación o entra con tu contraseña después de confirmar tu correo.",
-"No se pudo recibir el enlace de confirmación. Intenta entrar con tu contraseña después de confirmar tu correo."
+"No se pudo recibir el enlace de confirmación. Intenta entrar con tu contraseña después de confirmar tu correo.",
+"Se alcanzó el límite de envío de correos. Inténtalo más tarde. Si ya confirmaste tu correo, entra con tu contraseña.",
+"Revisa tu correo. Si tu cuenta ya está confirmada, entra con tu contraseña; registrarte otra vez no envía otra confirmación.",
+"Corregir correo del registro",
+"Confirma tu correo o entra si ya lo confirmaste."
 ]

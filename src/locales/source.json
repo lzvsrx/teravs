@@ -249,5 +249,9 @@
   "Confirmando seu e-mail no aplicativo…",
   "Link confirmado neste aplicativo.",
   "Não foi possível concluir pelo link. Use o aplicativo onde pediu a confirmação ou entre com sua senha após confirmar o e-mail.",
-  "Não foi possível receber o link de confirmação. Tente entrar com sua senha depois de confirmar o e-mail."
+  "Não foi possível receber o link de confirmação. Tente entrar com sua senha depois de confirmar o e-mail.",
+  "O limite de envio de e-mails foi atingido. Tente novamente mais tarde. Se já confirmou seu e-mail, entre com sua senha.",
+  "Confira seu e-mail. Se sua conta já estiver confirmada, entre com sua senha; cadastrar novamente não envia outra confirmação.",
+  "Corrigir e-mail do cadastro",
+  "Confirme o e-mail ou entre se já confirmou."
 ]

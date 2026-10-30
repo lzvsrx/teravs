@@ -50,6 +50,8 @@ O destinatário confirmou o recebimento do e-mail de teste, mas informou que o l
 
 ### Entrega de e-mail em produção
 
+Diagnóstico e configuração local para Gmail sem domínio próprio: [ENVIO-EMAIL.md](ENVIO-EMAIL.md). O SMTP só estará ativo após fornecer uma credencial válida; preparar o script não ativa o serviço.
+
 Segundo a [documentação oficial de SMTP](https://supabase.com/docs/guides/auth/auth-smtp), o remetente padrão tem restrições de destinatários e limites baixos; configure SMTP próprio para cadastro público. A alteração administrativa realizada nesta tarefa limitou-se às URLs de retorno; nenhum provedor SMTP ou template foi alterado. O sucesso de uma solicitação para um destinatário não comprova envio para todos os usuários. A chave pública não permite realizar esses ajustes administrativos.
 
 No painel Authentication, configure um provedor SMTP com domínio/remetente verificado, mantenha a confirmação de e-mail habilitada e confira os limites de envio. Use `{{ .ConfirmationURL }}` nos botões dos templates de confirmação e recuperação, preservando o tipo do link. Nunca substitua o link por uma URL fixa do site: isso não confirma a conta. Consulte [templates](https://supabase.com/docs/guides/auth/auth-email-templates) e [redirecionamentos](https://supabase.com/docs/guides/auth/redirect-urls).

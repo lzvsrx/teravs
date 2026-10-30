@@ -249,5 +249,9 @@
 "Confirmation de votre adresse e-mail dans l'application…",
 "Lien confirmé dans cette application.",
 "Impossible de terminer avec le lien. Utilisez l'application où vous avez demandé la confirmation ou connectez-vous avec votre mot de passe après avoir confirmé votre adresse e-mail.",
-"Impossible de recevoir le lien de confirmation. Essayez de vous connecter avec votre mot de passe après avoir confirmé votre adresse e-mail."
+"Impossible de recevoir le lien de confirmation. Essayez de vous connecter avec votre mot de passe après avoir confirmé votre adresse e-mail.",
+"La limite d'envoi d'e-mails est atteinte. Réessayez plus tard. Si votre adresse est déjà confirmée, connectez-vous avec votre mot de passe.",
+"Consultez vos e-mails. Si votre compte est déjà confirmé, connectez-vous avec votre mot de passe ; une nouvelle inscription n'envoie pas de nouvelle confirmation.",
+"Corriger l'adresse e-mail d'inscription",
+"Confirmez votre adresse e-mail ou connectez-vous si elle est déjà confirmée."
 ]

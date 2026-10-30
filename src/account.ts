@@ -15,7 +15,7 @@ export function mountAccount(onSession: (session: Session | null) => void, onAut
   <form id="account-form" data-auth-view="login"><label for="account-email">E-mail</label><input id="account-email" type="email" autocomplete="email" required maxlength="254" placeholder="voce@exemplo.com"><label for="account-password">Senha</label><input id="account-password" type="password" autocomplete="current-password" required maxlength="128"><button id="account-login" class="primary" type="submit">Entrar</button><button type="button" data-auth-go="recovery" class="auth-link">Esqueci minha senha</button><p class="auth-switch">Primeira vez por aqui? <button id="show-signup" type="button" data-auth-go="signup" class="auth-link">Criar conta</button></p></form>
   <form id="signup-form" data-auth-view="signup" hidden><label for="signup-name">Seu nome</label><input id="signup-name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Como podemos chamar você?"><label for="signup-email">E-mail</label><input id="signup-email" type="email" autocomplete="email" required maxlength="254"><label for="signup-password">Crie uma senha</label><input id="signup-password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" aria-describedby="password-help"><small id="password-help">Use pelo menos 8 caracteres.</small><label for="signup-confirm">Confirme a senha</label><input id="signup-confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><button id="account-signup" class="primary" type="submit">Criar minha conta</button><p class="auth-switch">Já tem uma conta? <button type="button" data-auth-go="login" class="auth-link">Entrar</button></p><small>O cadastro não ativa a memória. Você escolhe o que o Teravs pode guardar depois de entrar.</small></form>
   <form id="recovery-form" data-auth-view="recovery" hidden><label for="recovery-email">E-mail da sua conta</label><input id="recovery-email" type="email" autocomplete="email" required maxlength="254"><button class="primary" type="submit">Enviar link de recuperação</button><button type="button" data-auth-go="login" class="auth-link">Voltar para o login</button></form>
-  <div data-auth-view="verify" hidden><p>Abra o link do e-mail neste aparelho. No Android, ele pode abrir o Teravs para concluir a confirmação. Se confirmou no navegador, volte e entre com sua senha.</p><button id="resend-confirmation">Reenviar confirmação</button><button id="confirmation-login" type="button" class="primary">Já confirmei: entrar com minha senha</button></div>
+  <div data-auth-view="verify" hidden><p>Abra o link do e-mail neste aparelho. No Android, ele pode abrir o Teravs para concluir a confirmação. Se confirmou no navegador, volte e entre com sua senha.</p><p id="confirmation-address" translate="no" dir="auto"></p><button id="resend-confirmation">Reenviar confirmação</button><button id="confirmation-login" type="button" class="primary">Já confirmei: entrar com minha senha</button><button type="button" data-auth-go="signup" class="auth-link">Corrigir e-mail do cadastro</button></div>
   <form id="password-form" data-auth-view="password" hidden><label for="new-password">Nova senha</label><input id="new-password" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><label for="new-password-confirm">Confirme a nova senha</label><input id="new-password-confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128"><button class="primary" type="submit">Salvar nova senha</button></form>
   </section></div>`;
   document.body.prepend(gate);
@@ -31,7 +31,8 @@ export function mountAccount(onSession: (session: Session | null) => void, onAut
   }
   function failure(error: unknown) {
     const code = (error as { code?: string })?.code;
-    if ((error as { status?: number })?.status === 429 || code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return 'Aguarde alguns minutos antes de pedir outro e-mail.';
+    if (code === 'over_request_rate_limit') return 'Aguarde alguns minutos antes de pedir outro e-mail.';
+    if ((error as { status?: number })?.status === 429 || code === 'over_email_send_rate_limit') return 'O limite de envio de e-mails foi atingido. Tente novamente mais tarde. Se já confirmou seu e-mail, entre com sua senha.';
     if (code === 'email_address_not_authorized') return 'O serviço de e-mail ainda não permite enviar para este endereço. O administrador precisa configurar o envio no Supabase.';
     if (code === 'email_provider_disabled' || code === 'signup_disabled') return 'O cadastro por e-mail está indisponível no serviço. Tente novamente mais tarde.';
     if (code === 'weak_password') return 'Escolha uma senha mais forte, com letras, números e símbolos.';
@@ -40,10 +41,12 @@ export function mountAccount(onSession: (session: Session | null) => void, onAut
   function lock(locked: boolean) { app.hidden = locked; app.inert = locked; gate.hidden = !locked; }
   function note(text: string) { el('#account-status').textContent = text; }
   function view(name: string) {
-    const titles: Record<string, [string, string]> = { login: ['Entre na sua conta.', 'Use seu e-mail e senha para acessar a IA.'], signup: ['Crie sua conta.', 'Seu espaço para novas possibilidades.'], recovery: ['Vamos recuperar seu acesso.', 'Enviaremos as instruções para seu e-mail.'], verify: ['Confira seu e-mail.', 'Falta confirmar seu cadastro.'], password: ['Escolha uma nova senha.', 'Atualize sua senha para voltar ao Teravs.'] };
+    const titles: Record<string, [string, string]> = { login: ['Entre na sua conta.', 'Use seu e-mail e senha para acessar a IA.'], signup: ['Crie sua conta.', 'Seu espaço para novas possibilidades.'], recovery: ['Vamos recuperar seu acesso.', 'Enviaremos as instruções para seu e-mail.'], verify: ['Confira seu e-mail.', 'Confirme o e-mail ou entre se já confirmou.'], password: ['Escolha uma nova senha.', 'Atualize sua senha para voltar ao Teravs.'] };
     gate.querySelectorAll<HTMLElement>('[data-auth-view]').forEach(e => e.hidden = e.dataset.authView !== name);
     el('#auth-title').textContent = titles[name][0]; el('#auth-description').textContent = titles[name][1];
     note(''); gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(e => { e.value = ''; e.setCustomValidity(''); });
+    el('#confirmation-address').textContent = confirmationEmail;
+    if (name === 'signup' && confirmationEmail) el<HTMLInputElement>('#signup-email').value = confirmationEmail;
   }
   async function run(action: () => Promise<void>) {
     if (working) return; working = true; gate.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.disabled = true);
@@ -62,7 +65,7 @@ export function mountAccount(onSession: (session: Session | null) => void, onAut
   el<HTMLFormElement>('#signup-form').onsubmit = event => { event.preventDefault(); if (!match('#signup-password', '#signup-confirm')) return; void run(async () => {
     note('Criando sua conta…'); confirmationEmail = el<HTMLInputElement>('#signup-email').value.trim();
     const { data, error } = await cloud.auth.signUp({ email: confirmationEmail, password: el<HTMLInputElement>('#signup-password').value, options: { emailRedirectTo: REDIRECT, data: { display_name: el<HTMLInputElement>('#signup-name').value.trim() } } });
-    if (error) throw error; if (!data.session) { pending(confirmationEmail); view('verify'); note('Confira seu e-mail para confirmar o cadastro.'); }
+    if (error) throw error; if (!data.session) { pending(confirmationEmail); view('verify'); note('Confira seu e-mail. Se sua conta já estiver confirmada, entre com sua senha; cadastrar novamente não envia outra confirmação.'); }
     el<HTMLInputElement>('#signup-password').value = ''; el<HTMLInputElement>('#signup-confirm').value = '';
   }); };
   el<HTMLFormElement>('#recovery-form').onsubmit = event => { event.preventDefault(); void run(async () => {
