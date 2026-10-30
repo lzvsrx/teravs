@@ -1,0 +1,48 @@
+# Supabase do Teravs
+
+Projeto: `pzrzemrnmexgncmciofy`. A URL e a chave publishable fornecidas pelo proprietário estão em `config/supabase-public.json`. São configurações públicas de aplicativo, não acesso administrativo. Podem ser substituídas por variáveis de ambiente. Nenhuma senha de banco, chave secret ou token de administração foi incluído.
+
+## Verificação real realizada
+
+A URL respondeu HTTP 200 em `/auth/v1/settings` com a chave pública, cadastro por e-mail habilitado e confirmação de e-mail obrigatória. A consulta sem linhas à tabela `teravs_memories` retornou `PGRST205`: a tabela ainda não existe no projeto. Portanto, a memória online ainda não está pronta para gravar.
+
+## Aplicar a estrutura no banco
+
+Abra o [SQL Editor deste projeto](https://supabase.com/dashboard/project/pzrzemrnmexgncmciofy/sql/new), copie o conteúdo de [202610300001_teravs_memories.sql](../supabase/migrations/202610300001_teravs_memories.sql) e execute. Alternativamente, uma conexão administrativa autenticada com o Supabase permite aplicar a mesma migração. A chave publishable não pode executar DDL ou administrar o projeto.
+
+O SQL cria uma tabela separada, sem importar ou apagar registros anteriores. Inclui:
+
+- Proprietário vinculado a `auth.users`, removendo memórias quando a conta é excluída.
+- RLS para leitura, inserção e exclusão somente pelo próprio usuário autenticado.
+- Nenhuma permissão para visitantes anônimos; nenhuma atualização arbitrária de conteúdo/proprietário.
+- Consentimento obrigatório, conteúdo limitado a 2.000 caracteres e limite de 100 memórias por usuário, verificado também no banco.
+- Controle de concorrência para que inserções paralelas não ultrapassem o limite.
+
+## Configurar os links de confirmação
+
+Em Authentication → URL Configuration, configure:
+
+```text
+Site URL: https://lzvsrx.github.io/teravs/
+Redirect URL permitida: https://lzvsrx.github.io/teravs/
+```
+
+O cadastro solicita confirmação por e-mail. Depois da confirmação, o usuário pode entrar no site ou no aplicativo usando e-mail e senha. Nenhuma conta de teste real foi criada e nenhum e-mail foi disparado durante os testes automáticos.
+
+## Validar depois de aplicar
+
+Crie duas contas reais sob seu controle e confirme os e-mails. Entre na conta A, ative o consentimento em Minha memória e salve um registro. Confira que a conta B não pode ler ou excluir esse registro. Teste também o limite, exclusão e saída da conta. Não coloque dados reais sensíveis antes dessa validação do ambiente online.
+
+O código de login e memória usa o SDK oficial com a chave pública e o JWT de cada pessoa. O serviço de IA verifica o token em Supabase Auth e consulta o banco com o mesmo JWT, preservando RLS. Não utiliza chave secret para ignorar regras de acesso.
+
+## Testes locais
+
+`npm run test:server` inclui execução do SQL em PostgreSQL embarcado (PGlite), exercitando isolamento entre dois usuários, rejeição de proprietário incorreto e ausência de consentimento, limite, exclusão e bloqueio de visitante anônimo. Isso valida a migração localmente, mas não significa que ela foi aplicada ao Supabase online.
+
+Os testes de navegador simulam a API de autenticação e de dados, verificam login, consentimento, exclusão, cadastro com confirmação e limpeza da tela ao sair. A senha não é salva pelo código do Teravs; o SDK mantém a sessão autenticada no dispositivo.
+
+## Implantação
+
+O GitHub Pages pode oferecer login e memória diretamente pelo Supabase após a migração e os redirecionamentos. A geração de respostas ainda exige publicar a API Teravs e o motor de inferência; Supabase não os substitui.
+
+O `render.yaml` agora cria somente a API, sem provisionar um segundo banco pago. Memórias de produção usam Supabase. O SQLite temporário é legado para conversas locais sem conta e não deve guardar memórias online. Históricos de convidados não são transferidos automaticamente para contas autenticadas.

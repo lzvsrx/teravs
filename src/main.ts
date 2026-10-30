@@ -1,9 +1,12 @@
 import './style.css';
 import './studio.css';
+import { cloud, cloudToken, cloudMemory } from './cloud';
 type Message={role:'user'|'assistant';content:string;mode?:string;sources?:{title:string;url:string}[]};
 const $=<T extends HTMLElement>(s:string)=>document.querySelector<T>(s)!;
 const read=<T>(key:string,fallback:T):T=>{try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch{return fallback}};
 let messages=read<Message[]>('teravs.history',[]);
+let historyOwner:string|null=null;
+const historyKey=()=>historyOwner?'teravs.history.user.'+historyOwner:'teravs.history';
 const oldSettings=read('teravs.settings',{large:false,contrast:false,simple:false});
 let settings={large:!!oldSettings.large,contrast:!!oldSettings.contrast,simple:!!oldSettings.simple};
 let busy=false,controller:AbortController|undefined;
@@ -16,14 +19,15 @@ $('#app').innerHTML=`<a class="skip" href="#prompt">Pular para a conversa</a><as
 function save(){localStorage.setItem('teravs.settings',JSON.stringify(settings));document.body.classList.toggle('large',settings.large);document.body.classList.toggle('contrast',settings.contrast)}
 function tab(id:string){document.querySelectorAll<HTMLElement>('.tab').forEach(e=>e.hidden=e.id!==id);document.querySelectorAll('nav button').forEach(e=>e.classList.toggle('active',(e as HTMLElement).dataset.tab===id))}
 function status(text:string){$('#status').textContent=text}
-function render(){const box=$('#messages');box.replaceChildren();$('.welcome').hidden=messages.length>0;for(const m of messages){const article=document.createElement('article');article.className=m.role;const label=document.createElement('strong');label.textContent=m.role==='user'?'Você':'✦ Teravs';const text=document.createElement('p');text.textContent=m.content;article.append(label,text);if(m.role==='assistant'){const b=document.createElement('button');b.textContent='Ouvir resposta';b.onclick=()=>{if(!('speechSynthesis' in window)){status('Leitura em voz alta indisponível.');return}speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(m.content);utterance.lang='pt-BR';speechSynthesis.speak(utterance)};article.append(b)}if(m.role==='assistant')decorate(article,m);box.append(article)}localStorage.setItem('teravs.history',JSON.stringify(messages));}
+function render(){const box=$('#messages');box.replaceChildren();$('.welcome').hidden=messages.length>0;for(const m of messages){const article=document.createElement('article');article.className=m.role;const label=document.createElement('strong');label.textContent=m.role==='user'?'Você':'✦ Teravs';const text=document.createElement('p');text.textContent=m.content;article.append(label,text);if(m.role==='assistant'){const b=document.createElement('button');b.textContent='Ouvir resposta';b.onclick=()=>{if(!('speechSynthesis' in window)){status('Leitura em voz alta indisponível.');return}speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(m.content);utterance.lang='pt-BR';speechSynthesis.speak(utterance)};article.append(b)}if(m.role==='assistant')decorate(article,m);box.append(article)}localStorage.setItem(historyKey(),JSON.stringify(messages));}
 async function send(){
  const input=$<HTMLTextAreaElement>('#prompt');const content=input.value.trim();if(!content||busy)return;
  busy=true;controller=new AbortController();$('#stop').hidden=false;$<HTMLButtonElement>('#send').disabled=true;
- const mode=$<HTMLSelectElement>('#mode').value;messages.push({role:'user',content});input.value='';render();
+ const responseOwner=historyOwner;const mode=$<HTMLSelectElement>('#mode').value;messages.push({role:'user',content});input.value='';render();
  status(mode==='research'?'Pesquisando na Wikipédia e preparando a resposta…':'Teravs está criando…');
  const timeout=setTimeout(()=>controller?.abort(),185000);
  try{const data=await api('/chat',{method:'POST',body:JSON.stringify({messages:messages.slice(-20).map(({role,content})=>({role,content})),mode,simple:settings.simple,useMemory}),signal:controller.signal});
+ if(responseOwner!==historyOwner)return;
  if(typeof data.content!=='string'||!data.content.trim())throw Error('O serviço não retornou conteúdo.');
  messages.push({role:'assistant',content:data.content,mode,sources:data.sources});render();status('Criação concluída.');
  if(useMemory){try{await api('/memories',{method:'POST',body:JSON.stringify({consent:true,content:('Pergunta: '+content+'\nResposta: '+data.content).slice(0,2000)})});status('Criação concluída. Memória salva com sua autorização.')}catch{status('Criação concluída, mas não foi possível salvar a memória. Confira sua lista.')}}
@@ -36,7 +40,10 @@ $('#job-start').onclick=()=>{const job=$<HTMLInputElement>('#job').value.trim();
 $('#mic').onclick=()=>{const Speech=(window as any).SpeechRecognition||(window as any).webkitSpeechRecognition;if(!Speech){status('Ditado indisponível neste dispositivo. Use o ditado do teclado do sistema.');return}const recognition=new Speech();recognition.lang='pt-BR';recognition.onresult=(event:any)=>{$<HTMLTextAreaElement>('#prompt').value+=event.results[0][0].transcript;status('Ditado concluído. Revise antes de enviar.')};recognition.onerror=()=>status('Não foi possível usar o microfone. Verifique a permissão.');recognition.start();status('Ouvindo…')};save();render();
 
 async function api(path:string,init:RequestInit={}){
- const response=await fetch(API+'/api'+path,{...init,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token,...init.headers}});
+ if(path.startsWith('/memories'))return cloudMemory(path,init);
+ const accountToken=await cloudToken();
+ if(useMemory&&!accountToken)throw Error('Entre na sua conta para usar a memória online.');
+ const response=await fetch(API+'/api'+path,{...init,headers:{'Content-Type':'application/json',Authorization:'Bearer '+(accountToken||token),...init.headers}});
  let data;try{data=await response.json()}catch{throw Error('O serviço do Teravs não está disponível nesta instalação.')}
  if(!response.ok)throw Error(data.error||'O serviço retornou HTTP '+response.status);return data;
 }
@@ -57,13 +64,41 @@ function decorate(article:HTMLElement,m:Message){
 }
 async function refreshMemory(){
  const state=$('#memory-status');state.textContent='Carregando memórias…';
- try{const data=await api('/memories');$('#memory-list').replaceChildren();for(const memory of data.memories){const article=document.createElement('article');const text=document.createElement('p');text.textContent=memory.content;const button=document.createElement('button');button.textContent='Apagar esta memória';button.onclick=async()=>{try{await api('/memories/'+encodeURIComponent(memory.id),{method:'DELETE'});await refreshMemory()}catch{state.textContent='Não foi possível apagar a memória.'}};article.append(text,button);$('#memory-list').append(article)}state.textContent=data.memories.length?data.memories.length+' memória(s) salvas.':'Nenhuma memória salva.'}catch{state.textContent='Não foi possível acessar o banco do Teravs.'}
+ try{const data=await api('/memories');$('#memory-list').replaceChildren();for(const memory of data.memories){const article=document.createElement('article');const text=document.createElement('p');text.textContent=memory.content;const button=document.createElement('button');button.textContent='Apagar esta memória';button.onclick=async()=>{try{await api('/memories/'+encodeURIComponent(memory.id),{method:'DELETE'});await refreshMemory()}catch{state.textContent='Não foi possível apagar a memória.'}};article.append(text,button);$('#memory-list').append(article)}state.textContent=data.memories.length?data.memories.length+' memória(s) salvas.':'Nenhuma memória salva.'}catch(error){state.textContent=error instanceof Error?error.message:'Não foi possível acessar o banco do Teravs.'}
 }
 $<HTMLInputElement>('#remember').checked=useMemory;
-$('#remember').onchange=()=>{useMemory=$<HTMLInputElement>('#remember').checked;localStorage.setItem('teravs.useMemory',JSON.stringify(useMemory))};
-$('#save-memory').onclick=async()=>{const content=$<HTMLTextAreaElement>('#memory-content').value.trim();if(!content)return;if(!useMemory){$('#memory-status').textContent='Ative a permissão de memória antes de salvar.';return}try{await api('/memories',{method:'POST',body:JSON.stringify({content,consent:true})});$<HTMLTextAreaElement>('#memory-content').value='';await refreshMemory()}catch{$('#memory-status').textContent='Não foi possível salvar. Confira o serviço e o limite de memórias.'}};
+$('#remember').onchange=()=>{useMemory=$<HTMLInputElement>('#remember').checked;localStorage.setItem('teravs.useMemory.'+(historyOwner||'guest'),JSON.stringify(useMemory))};
+$('#save-memory').onclick=async()=>{const content=$<HTMLTextAreaElement>('#memory-content').value.trim();if(!content)return;if(!useMemory){$('#memory-status').textContent='Ative a permissão de memória antes de salvar.';return}try{await api('/memories',{method:'POST',body:JSON.stringify({content,consent:true})});$<HTMLTextAreaElement>('#memory-content').value='';await refreshMemory()}catch(error){$('#memory-status').textContent=error instanceof Error?error.message:'Não foi possível salvar. Confira o serviço e o limite de memórias.'}};
 $('#refresh-memory').onclick=()=>void refreshMemory();
 $('#delete-memory').onclick=async()=>{if(!confirm('Apagar permanentemente todas as memórias desta sessão?'))return;try{await api('/memories',{method:'DELETE'});await refreshMemory()}catch{$('#memory-status').textContent='Não foi possível apagar. Tente novamente.'}};
 document.querySelectorAll<HTMLElement>('[data-create]').forEach(b=>b.onclick=()=>{$<HTMLSelectElement>('#mode').value=b.dataset.create!;tab('chat');$('#prompt').focus()});
 document.querySelector<HTMLElement>('[data-tab="memory"]')!.onclick=()=>{tab('memory');void refreshMemory()};
 if(location.hostname.endsWith('github.io')&&!import.meta.env.VITE_TERAVS_API_URL)status('O Teravs online ainda está em preparação. Use o aplicativo Windows para conversar.');
+
+const accountButton=document.createElement('button');accountButton.dataset.tab='account';accountButton.textContent='◎ Minha conta';accountButton.onclick=()=>tab('account');$('nav').append(accountButton);
+const accountSection=document.createElement('section');accountSection.id='account';accountSection.className='tab';accountSection.hidden=true;
+accountSection.innerHTML=`<span class="eyebrow">SUAS MEMÓRIAS, COM VOCÊ</span><h1>Sua conta Teravs.</h1><p>Entre para acessar suas memórias em diferentes aparelhos. O histórico visível continua separado por conta neste dispositivo.</p><p id="account-status" role="status">Verificando sua conta…</p><form id="account-form"><label for="account-email">E-mail</label><input id="account-email" type="email" autocomplete="email" required maxlength="254"><label for="account-password">Senha</label><input id="account-password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"><button class="primary" id="account-login">Entrar</button><button type="button" id="account-signup">Criar conta</button></form><button id="account-logout" hidden>Sair desta conta</button><div class="notice"><strong>Memória online</strong><p id="cloud-detail">A configuração do aplicativo está pronta. O banco precisa ter a tabela e as regras de privacidade do Teravs. Criar conta não ativa o salvamento automático: você decide em Minha memória.</p><a href="https://pzrzemrnmexgncmciofy.supabase.co" target="_blank" rel="noopener noreferrer">Serviço Supabase do Teravs</a></div>`;
+$('main').append(accountSection);
+$('#memory .notice p').textContent='Com uma conta, as memórias autorizadas ficam no Supabase e podem ser acessadas em outros aparelhos. O histórico visível fica neste dispositivo, separado por conta. Sair não apaga suas memórias: use o botão de exclusão quando desejar.';
+cloud.auth.onAuthStateChange((_event,session)=>{
+ const next=session?.user.id||null;
+ if(next!==historyOwner){controller?.abort();localStorage.setItem(historyKey(),JSON.stringify(messages));historyOwner=next;messages=read<Message[]>(historyKey(),[]);render();$('#memory-list').replaceChildren();$('#memory-status').textContent='';$<HTMLTextAreaElement>('#memory-content').value='';}
+ useMemory=next?read('teravs.useMemory.'+next,false):false;$<HTMLInputElement>('#remember').checked=useMemory;
+ $('#account-status').textContent=session?'Você entrou como '+session.user.email+'.':'Entre ou crie sua conta para usar a memória online.';
+ $('#account-form').hidden=!!session;$('#account-logout').hidden=!session;
+ $<HTMLInputElement>('#account-password').value='';
+});
+let authBusy=false;
+async function authenticate(signup=false){
+ if(authBusy||!$<HTMLFormElement>('#account-form').reportValidity())return;authBusy=true;
+ $<HTMLButtonElement>('#account-login').disabled=true;$<HTMLButtonElement>('#account-signup').disabled=true;$('#account-status').textContent=signup?'Criando sua conta…':'Entrando…';
+ try{const email=$<HTMLInputElement>('#account-email').value.trim(),password=$<HTMLInputElement>('#account-password').value;
+ const result=signup?await cloud.auth.signUp({email,password,options:{emailRedirectTo:'https://lzvsrx.github.io/teravs/'}}):await cloud.auth.signInWithPassword({email,password});
+ if(result.error)throw result.error;
+ if(signup&&!result.data.session)$('#account-status').textContent='Confira seu e-mail para confirmar o cadastro. Depois volte e entre com sua senha.';
+ $<HTMLInputElement>('#account-password').value='';
+ }catch{$('#account-status').textContent=signup?'Não foi possível criar a conta. Verifique os dados e tente novamente.':'Não foi possível entrar. Confira e-mail, senha e a confirmação do cadastro.'}
+ finally{authBusy=false;$<HTMLButtonElement>('#account-login').disabled=false;$<HTMLButtonElement>('#account-signup').disabled=false}
+}
+$('#account-form').onsubmit=e=>{e.preventDefault();void authenticate()};$('#account-signup').onclick=()=>void authenticate(true);
+$('#account-logout').onclick=async()=>{controller?.abort();const {error}=await cloud.auth.signOut({scope:'local'});if(error)$('#account-status').textContent='Não foi possível sair. Tente novamente.'};

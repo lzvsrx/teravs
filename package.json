@@ -1,6 +1,6 @@
 {
   "name": "teravs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Teravs — assistente inclusivo com estúdio criativo e memória controlável",
   "main": "electron/main.cjs",
   "scripts": {
@@ -15,7 +15,9 @@
     "android:open": "cap open android",
     "test": "playwright test"
   },
-  "engines": {"node": ">=24"},
+  "engines": {
+    "node": ">=24"
+  },
   "keywords": [],
   "author": "Teravs",
   "license": "UNLICENSED",
@@ -23,11 +25,14 @@
   "dependencies": {
     "@capacitor/android": "^8.6.0",
     "@capacitor/core": "^8.6.0",
+    "@supabase/supabase-js": "^2.118.0",
     "pg": "^8.23.1"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.6.0",
+    "@electric-sql/pglite": "^0.5.13",
     "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
     "concurrently": "^10.0.6",
     "electron": "^45.1.0",
     "electron-builder": "^26.18.0",
@@ -44,6 +49,7 @@
       "dist/**/*",
       "electron/**/*",
       "server/**/*",
+      "config/**/*",
       "package.json"
     ],
     "win": {

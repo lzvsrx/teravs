@@ -1,58 +1,54 @@
-# Publicação do Teravs
+# Publicação do Teravs 0.3
 
 ## Arquitetura
 
 ```text
 GitHub Pages / Android / Windows
-             |
-             | HTTPS, sessão aleatória por dispositivo
-             v
-       Serviço Teravs (Node.js)
-          |              |
-          v              v
- PostgreSQL online   Inferência Ollama
-          |
-   Memórias consentidas
+    |                     |
+    | login e memória     | geração de respostas
+    v                     v
+Supabase Auth + Postgres   Serviço Teravs -> modelo de inferência
+        RLS                    |
+                               +-> validação do JWT e leitura de memórias com RLS
 ```
 
-O GitHub Pages hospeda apenas os arquivos estáticos. Não executa o servidor Node, não hospeda o banco nem fornece GPU. A interface sozinha não torna a IA online.
+O GitHub Pages hospeda apenas a interface. Não executa Node, o modelo ou o banco. Login e memórias acessam o Supabase pelo SDK oficial. Geração de conteúdo ainda exige a API e a inferência.
 
-## Código e interface no GitHub
+## Primeiro: Supabase
 
-O workflow `.github/workflows/pages.yml` compila e publica `dist/` a cada push em `main`. No repositório, configure **Settings → Pages → Source → GitHub Actions**. O workflow não precisa de um token pessoal: usa o token temporário do GitHub.
+Siga [SUPABASE.md](SUPABASE.md), aplique a migração SQL e configure os links de confirmação. A URL e a chave publishable estão em `config/supabase-public.json`, compartilhado pelo cliente e servidor. São dados públicos; não inclua chaves secret nem senha de banco nesse arquivo.
 
-Depois de publicar o serviço de API, defina a variável pública de repositório `TERAVS_API_URL` para a origem HTTPS do serviço (sem `/api`). Reexecute o workflow. Nenhuma chave de banco ou de modelo deve entrar em variável `VITE_*`, JavaScript, APK ou repositório.
+O projeto online respondeu às verificações de API, mas a tabela não estava criada no momento da configuração. Os testes locais não substituem aplicar e validar a migração no projeto real.
 
-## Serviço e banco online
+## Interface
 
-`render.yaml` prepara uma API Docker e um PostgreSQL separados. Ele é uma configuração pronta para aplicar, não uma implantação já realizada. Os planos indicados podem gerar cobranças no provedor. A conta de hospedagem precisa estar conectada e o endpoint de inferência precisa existir.
+`.github/workflows/pages.yml` compila e publica a cada push em `main`, executando os testes do serviço antes do build. Em Settings → Pages, a origem deve ser GitHub Actions. O token de publicação é temporário e fornecido pelo GitHub.
 
-1. Conecte o repositório ao Render e crie o Blueprint.
-2. Configure `OLLAMA_URL` com uma origem HTTPS de inferência privada/acessível ao serviço. Um endereço `127.0.0.1` em um servidor de nuvem aponta para esse servidor, não para o computador Windows.
-3. Defina `ALLOWED_ORIGINS` com as origens exatas de GitHub Pages e Android. Exemplo: `https://lzvsrx.github.io,https://localhost,http://localhost`. Adicione `null` apenas quando o aplicativo desktop precisar chamar uma API remota a partir de arquivo local.
-4. O Blueprint conecta `DATABASE_URL` ao PostgreSQL. As tabelas são criadas no primeiro início do serviço. SQLite serve apenas para instalação local; não use um disco efêmero para dados de produção.
-5. Verifique `/api/health`, salve e apague uma memória com dois dispositivos/sessões e confirme que os dados permanecem isolados.
-6. Configure a variável `TERAVS_API_URL` no GitHub e faça nova compilação.
+Variáveis opcionais do repositório:
 
-## Android
+- `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`: sobrescrevem as configurações públicas na compilação.
+- `TERAVS_API_URL`: origem HTTPS da API do Teravs, sem `/api`.
 
-Compile com `VITE_TERAVS_API_URL` apontando para a API HTTPS. Execute `npm run android:sync` e `gradlew.bat assembleDebug` dentro de `android/`, usando JDK 21. Sem essa configuração, o APK não alcança o serviço do computador. Não há tela para o usuário configurar provedores.
+Nenhuma variável `VITE_*` pode conter credenciais administrativas: elas são incorporadas ao JavaScript distribuído.
 
-## Segurança e limites antes de distribuir amplamente
+## Serviço no Render
 
-A sessão usa uma chave aleatória de 256 bits mantida no dispositivo, enviada como bearer e indexada no banco apenas por hash SHA-256. É uma credencial de dispositivo, não uma conta recuperável ou login entre aparelhos. Não há recuperação quando o armazenamento local é apagado. O usuário pode exportar o histórico e excluir memórias antes de limpar o dispositivo.
+O `render.yaml` provisiona somente uma API Docker; o plano indicado é pago. Ele não cria um segundo banco. Sua presença no repositório não significa que a API esteja implantada.
 
-As consultas SQL são parametrizadas e filtradas pelo proprietário; dados brutos e stacks não são enviados ao cliente em erros. Histórico completo não é gravado no banco. O opt-in grava resumos por truncamento de pergunta/resposta, até 2.000 caracteres por troca e 100 registros; não é treinamento global.
+Defina `OLLAMA_URL` para um motor de inferência acessível ao serviço e `ALLOWED_ORIGINS` com origens exatas, por exemplo `https://lzvsrx.github.io,https://localhost,http://localhost`. Um servidor de nuvem não alcança o Ollama do computador por `127.0.0.1`. É necessário um destino de inferência adequado, com recursos de memória e processamento.
 
-O serviço limita tamanho, solicitações por sessão e gerações simultâneas. Para produção pública de grande porte, adicione login recuperável, limites globais de rede/conta, monitoramento sem registrar prompts, política de retenção, backups e avaliações de acessibilidade. CORS não substitui autenticação e uma chave de dispositivo não impede abuso de criação de novas sessões.
+Se usar outro projeto Supabase, configure `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` também no servidor. O JWT é validado por Supabase Auth. Leituras e gravações de nuvem são feitas com o JWT do usuário, sem chave secret para contornar RLS. Visitantes podem conversar sem memória; não podem gravar memórias online.
 
-## IA própria
+`/api/health` verifica que o serviço iniciou; não certifica que o modelo, o login e a tabela estão prontos. Teste cada função separadamente. O SQLite temporário do contêiner existe somente por compatibilidade local e não deve guardar memórias de produção.
 
-O serviço, roteamento, recuperação de memória, interface e controles são código do Teravs. O modelo de linguagem atual é **Qwen3 4B**, executado por Ollama. Não foi treinado do zero neste projeto. Treinar pesos próprios exige corpus licenciado, tokenizador, arquitetura, treinamento em hardware adequado e avaliação; renomear um modelo existente não o torna um modelo novo.
+## Android e Windows
 
-## Referências
+Compile Android com `VITE_TERAVS_API_URL` apontando para a API HTTPS. Rode `npm run android:sync`, depois `gradlew.bat assembleDebug` dentro de `android/` com JDK 21. Sem a API online, login e memórias podem funcionar pelo Supabase após a migração, mas a geração de respostas não funciona no Android.
 
-- [GitHub Pages: hospedagem estática](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)
-- [Render Blueprints](https://render.com/docs/blueprint-spec)
-- [Ollama Chat API](https://docs.ollama.com/api/chat)
-- [MediaWiki Search API](https://www.mediawiki.org/wiki/API:Search)
+No Windows, o Electron inicia o serviço local e usa o Ollama instalado na máquina. O pacote não inclui pesos de modelos ou um servidor de nuvem. As configurações públicas Supabase são distribuídas em `config/`.
+
+## Antes de distribuir amplamente
+
+Teste duas contas reais e confirme o isolamento e a restauração de backups. Configure recuperação de conta, monitoramento sem registrar prompts, limites de rede/conta e política de retenção. Os limites em memória do serviço e CORS não substituem proteção contra abuso de um serviço público.
+
+O modelo atual continua Qwen3 4B; não foi treinado do zero pelo Teravs. A memória usa recuperação de contexto, sem alterar pesos.

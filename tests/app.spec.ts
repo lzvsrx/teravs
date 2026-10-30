@@ -10,20 +10,41 @@ test('conversa sem configuração de IA, persistência e acessibilidade', async 
   await expect(page.locator('body')).toHaveClass(/large/);
 });
 test('memória exige permissão e exclusão remove o registro', async ({ page }) => {
+  const uid='11111111-1111-4111-8111-111111111111';
+  const jwt=['eyJhbGciOiJIUzI1NiJ9',Buffer.from(JSON.stringify({sub:uid,exp:Math.floor(Date.now()/1000)+3600})).toString('base64url'),'test'].join('.');
+  await page.route('**/auth/v1/token?grant_type=password',route=>route.fulfill({json:{access_token:jwt,refresh_token:'fake-refresh',expires_in:3600,token_type:'bearer',user:{id:uid,email:'teste@example.invalid',aud:'authenticated',role:'authenticated'}}}));
+  await page.route('**/auth/v1/logout*',route=>route.fulfill({json:{}}));
   let saved: { id: string; content: string }[] = [];
-  await page.route('**/api/memories', async route => {
+  await page.route('**/rest/v1/teravs_memories*', async route => {
     const request = route.request();
     if (request.method() === 'POST') { saved.push({ id: '1', content: request.postDataJSON().content }); await route.fulfill({ status: 201, json: { id: '1' } }); }
     else if (request.method() === 'DELETE') { saved = []; await route.fulfill({ json: { ok: true } }); }
-    else await route.fulfill({ json: { memories: saved } });
+    else await route.fulfill({ json: saved });
   });
-  await page.goto('/'); await page.locator('[data-tab="memory"]').click();
+  await page.goto('/');await page.locator('[data-tab="account"]').click();
+  await page.locator('#account-email').fill('teste@example.invalid');await page.locator('#account-password').fill('testing-password');await page.locator('#account-login').click();
+  await expect(page.locator('#account-status')).toContainText('Você entrou');
+  await page.locator('[data-tab="memory"]').click();
   await page.locator('#memory-content').fill('Prefiro frases curtas.'); await page.locator('#save-memory').click();
   await expect(page.locator('#memory-status')).toContainText('Ative a permissão'); expect(saved.length).toBe(0);
   await page.locator('#remember').check(); await page.locator('#save-memory').click();
   await expect(page.locator('#memory-list')).toContainText('Prefiro frases curtas.');
   page.on('dialog', dialog => dialog.accept()); await page.locator('#delete-memory').click();
   await expect(page.locator('#memory-status')).toContainText('Nenhuma memória');
+  await page.route('**/api/chat',route=>route.fulfill({json:{content:'Resposta privada desta conta.',sources:[]}}));
+  await page.locator('[data-tab="chat"]').click();await page.locator('#prompt').fill('Pergunta privada');await page.locator('#send').click();
+  await expect(page.getByText('Resposta privada desta conta.')).toBeVisible();
+  await page.locator('[data-tab="account"]').click();await page.locator('#account-logout').click();
+  await expect(page.locator('#account-form')).toBeVisible();await expect(page.locator('#memory-list')).toBeEmpty();
+  await expect(page.locator('#messages')).toBeEmpty();
+});
+test('cadastro solicita confirmação por e-mail sem gravar a senha',async({page})=>{
+  await page.route('**/auth/v1/signup*',route=>route.fulfill({json:{id:'33333333-3333-4333-8333-333333333333',email:'novo@example.invalid',identities:[],aud:'authenticated',created_at:new Date().toISOString()}}));
+  await page.goto('/');await page.locator('[data-tab="account"]').click();
+  await expect(page.locator('#account-status')).toContainText('Entre ou crie');
+  await page.locator('#account-email').fill('novo@example.invalid');await page.locator('#account-password').fill('senha-de-teste');await page.locator('#account-signup').click();
+  await expect(page.locator('#account-status')).toContainText('Confira seu e-mail');await expect(page.locator('#account-password')).toHaveValue('');
+  expect(await page.evaluate(()=>JSON.stringify(localStorage))).not.toContain('senha-de-teste');
 });
 test('SVG gerado é exibido como imagem sanitizada, sem script ou recursos externos', async ({ page }) => {
   await page.goto('/');

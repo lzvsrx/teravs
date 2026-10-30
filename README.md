@@ -1,6 +1,8 @@
-# Teravs 0.2
+# Teravs 0.3
 
 Assistente inclusivo para Windows, Android e web. Elo, uma órbita turquesa, é o personagem. Interface em português, estúdio criativo, apoio contextual por profissão e memória opcional.
+
+Integração Supabase preparada com login por e-mail e senha e memória por usuário. A URL e a chave pública foram verificadas; a tabela online ainda precisa receber a [migração SQL](supabase/migrations/202610300001_teravs_memories.sql). Veja [a configuração do projeto Supabase](docs/SUPABASE.md).
 
 [Repositório](https://github.com/lzvsrx/teravs) · [Interface no GitHub Pages](https://lzvsrx.github.io/teravs/) · [Versões para download](https://github.com/lzvsrx/teravs/releases)
 
@@ -44,9 +46,9 @@ Consulte [docs/DEPLOY.md](docs/DEPLOY.md). GitHub Pages hospeda a interface; o s
 
 ## Memória e privacidade
 
-O histórico da interface fica no dispositivo. A memória de longo prazo começa desativada. Ao autorizar, novas trocas concluídas podem ser armazenadas no banco do serviço, até 2.000 caracteres por troca e 100 registros por sessão. É possível consultar e apagar todos os registros. Desativar impede uso e novas gravações, mas não apaga memórias existentes. A pesquisa envia o pedido atual à Wikipédia somente no modo de pesquisa.
+O histórico da interface fica no dispositivo, separado por conta. A memória online exige login e começa desativada para cada usuário. Ao autorizar, novas trocas concluídas podem ser armazenadas no Supabase, até 2.000 caracteres por troca e 100 registros por usuário. É possível consultar e apagar todos os registros. Desativar impede uso e novas gravações, mas não apaga memórias existentes. A pesquisa envia o pedido atual à Wikipédia somente no modo de pesquisa.
 
-Memória e histórico são enviados ao motor para responder. A credencial aleatória pertence ao dispositivo e não permite recuperação entre aparelhos. Limpar o dispositivo perde o acesso às memórias: exclua-as antes, se desejar. Dados de desenvolvimento, banco, credenciais e binários são ignorados pelo Git.
+Memórias autorizadas e o histórico da conversa são enviados ao motor para responder. O login permite acessar memórias em aparelhos diferentes, depois de aplicar as regras do banco. Sair remove as informações da tela e preserva o histórico local da conta para o próximo login nesse dispositivo. Não há importação automática de dados anteriores de convidados. O SDK guarda a sessão; a senha não é salva pelo código do Teravs. Configurações publishable são públicas; credenciais administrativas nunca entram no aplicativo ou no Git.
 
 ## Limites reais
 
