@@ -1,6 +1,10 @@
-# Teravs 0.3
+# Teravs 0.3.1
 
 Assistente inclusivo para Windows, Android e web. Elo, uma órbita turquesa, é o personagem. Interface em português, estúdio criativo, apoio contextual por profissão e memória opcional.
+
+**Criado por Luiz Otavio Valenzi Sousa.** © 2026 Luiz Otavio Valenzi Sousa. Direitos sobre os elementos originais do Teravs reservados, respeitadas a legislação aplicável e as licenças de terceiros. [Autoria e titularidade](AUTHORSHIP.md) · [Direitos reservados](LICENSE) · [Componentes de terceiros](THIRD_PARTY_NOTICES.md).
+
+[Pesquisa internacional de leis e regras de IA](docs/legal/README.md) · [Mapa por jurisdição](docs/legal/MAPA.md) · [Checklist de implementação](docs/legal/CHECKLIST.md). A pesquisa é datada e não certifica conformidade em todos os países.
 
 Integração Supabase preparada com login por e-mail e senha e memória por usuário. A URL e a chave pública foram verificadas; a tabela online ainda precisa receber a [migração SQL](supabase/migrations/202610300001_teravs_memories.sql). Veja [a configuração do projeto Supabase](docs/SUPABASE.md).
 

@@ -1,0 +1,688 @@
+{
+  "metadados": {
+    "consultado_em": "2026-10-30",
+    "instrumentos_selecionados": 41,
+    "entradas_de_jurisdicao": 31,
+    "controles_avaliados": 28,
+    "escopo": "Pesquisa internacional inicial, não exaustiva; não certifica conformidade em todos os países nem implementação dos controles."
+  },
+  "instrumentos": [
+    {
+      "id": "G01",
+      "jurisdicao": "Internacional",
+      "instrumento": "Recomendação UNESCO sobre Ética da IA",
+      "natureza": "Recomendação internacional",
+      "situacao_em_2026_10_30": "Referência ética; não é lei penal ou licença mundial de operação",
+      "gatilho_de_aplicabilidade": "Governança e desenvolvimento responsável; incorporação local deve ser verificada",
+      "medida_a_avaliar_no_teravs": "Avaliar direitos humanos, transparência, equidade e supervisão",
+      "fonte_oficial": "https://www.unesco.org/en/artificial-intelligence/recommendation-ethics",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "G02",
+      "jurisdicao": "Internacional",
+      "instrumento": "Princípios de IA da OCDE",
+      "natureza": "Recomendação intergovernamental",
+      "situacao_em_2026_10_30": "Referência de governança atualizada em 2024; não substitui leis nacionais",
+      "gatilho_de_aplicabilidade": "Uso como parâmetro de políticas e avaliação",
+      "medida_a_avaliar_no_teravs": "Documentar responsabilidade, segurança, robustez e riscos",
+      "fonte_oficial": "https://oecd.ai/en/ai-principles",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "G03",
+      "jurisdicao": "Conselho da Europa e partes aderentes",
+      "instrumento": "Convenção-quadro de IA CETS 225",
+      "natureza": "Tratado internacional",
+      "situacao_em_2026_10_30": "Aplicação depende de entrada em vigor, ratificações e medidas de implementação; assinatura não basta",
+      "gatilho_de_aplicabilidade": "Estado parte e legislação de implementação aplicável",
+      "medida_a_avaliar_no_teravs": "Acompanhar situação de cada mercado; avaliar impactos sobre direitos e controles",
+      "fonte_oficial": "https://www.coe.int/en/web/artificial-intelligence/the-framework-convention-on-artificial-intelligence",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR01",
+      "jurisdicao": "Brasil",
+      "instrumento": "LGPD — Lei 13.709/2018",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto consolidado vigente consultado",
+      "gatilho_de_aplicabilidade": "Tratamento de dados pessoais alcançado pela lei, inclusive conforme seus critérios territoriais",
+      "medida_a_avaliar_no_teravs": "Definir bases legais, transparência, direitos, segurança e regras para dados sensíveis",
+      "fonte_oficial": "https://presidencia.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709compilado.htm",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR02",
+      "jurisdicao": "Brasil",
+      "instrumento": "LGPD — artigo 20",
+      "natureza": "Dispositivo legal",
+      "situacao_em_2026_10_30": "Prevê revisão de decisões exclusivamente automatizadas que afetem interesses e informações sobre critérios, nos termos legais",
+      "gatilho_de_aplicabilidade": "Decisões exclusivamente automatizadas com os efeitos previstos no artigo",
+      "medida_a_avaliar_no_teravs": "Evitar decisões finais autônomas de alto impacto; preparar explicação e canal de contestação",
+      "fonte_oficial": "https://presidencia.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709compilado.htm",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR03",
+      "jurisdicao": "Brasil",
+      "instrumento": "Estatuto Digital da Criança e do Adolescente — Lei 15.211/2025",
+      "natureza": "Lei com regulamentação",
+      "situacao_em_2026_10_30": "Lei publicada; analisar texto consolidado, regulamentação e regras aplicáveis ao serviço",
+      "gatilho_de_aplicabilidade": "Produtos direcionados a menores ou de acesso provável por eles conforme a lei",
+      "medida_a_avaliar_no_teravs": "Definir público etário, medidas proporcionais e fluxos adequados de proteção",
+      "fonte_oficial": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15211.htm",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR04",
+      "jurisdicao": "Brasil",
+      "instrumento": "Lei Brasileira de Inclusão — Lei 13.146/2015",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto vigente; acessibilidade digital deve ser avaliada no contexto de aplicação",
+      "gatilho_de_aplicabilidade": "Oferta e operação alcançadas pela lei; requisitos específicos para sítios na internet",
+      "medida_a_avaliar_no_teravs": "Testar teclado, leitores de tela, formulários, contraste e documentos; não prometer acessibilidade universal sem avaliação",
+      "fonte_oficial": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR05",
+      "jurisdicao": "Brasil",
+      "instrumento": "Lei 9.609/1998 e proteção de programas de computador",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Regime de propriedade intelectual específico para software",
+      "gatilho_de_aplicabilidade": "Elementos protegíveis, cadeia de titularidade e uso/licenciamento de software",
+      "medida_a_avaliar_no_teravs": "Registrar autoria declarada; preservar direitos e licenças externas; avaliar registro separadamente",
+      "fonte_oficial": "https://www.gov.br/inpi/pt-br/servicos/programas-de-computador/legislacao-programa-de-computador",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR06",
+      "jurisdicao": "Brasil",
+      "instrumento": "Lei 9.610/1998 — direitos autorais",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto legal consultado; proteção varia conforme objeto e autoria",
+      "gatilho_de_aplicabilidade": "Uso de obras, materiais, dados expressivos e saídas com contribuição autoral",
+      "medida_a_avaliar_no_teravs": "Verificar origem e licença de materiais; não presumir direito sobre tudo que a IA produz",
+      "fonte_oficial": "https://www.planalto.gov.br/ccivil_03/leis/l9610.htm",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR07",
+      "jurisdicao": "Brasil",
+      "instrumento": "PL 2338/2023",
+      "natureza": "Projeto de lei",
+      "situacao_em_2026_10_30": "API oficial consultada: Aguardando Parecer; movimentação de 27/10/2026. Não tratado como lei vigente",
+      "gatilho_de_aplicabilidade": "Monitoramento legislativo e futuras mudanças após aprovação e vigência",
+      "medida_a_avaliar_no_teravs": "Acompanhar tramitação sem apresentar texto proposto como obrigação já vigente",
+      "fonte_oficial": "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "BR08",
+      "jurisdicao": "Brasil e transferências internacionais",
+      "instrumento": "Resolução CD/ANPD 19/2024",
+      "natureza": "Regulamentação",
+      "situacao_em_2026_10_30": "Regulamenta transferência internacional de dados sob a LGPD",
+      "gatilho_de_aplicabilidade": "Compartilhamento/transmissão internacional alcançado pela LGPD",
+      "medida_a_avaliar_no_teravs": "Mapear localização e contratos de Supabase, hospedagem, motor e subprocessadores",
+      "fonte_oficial": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-lanca-pagina-sobre-transferencia-internacional-de-dados",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "EU01",
+      "jurisdicao": "União Europeia",
+      "instrumento": "AI Act — Regulamento 2024/1689 e alterações",
+      "natureza": "Regulamento",
+      "situacao_em_2026_10_30": "Aplicação por fases; cronograma oficial atualizado distingue regras de 2026 e obrigações futuras de 2027/2028",
+      "gatilho_de_aplicabilidade": "Papel de fornecedor/implantador, mercado, finalidade e efeitos previstos no regulamento",
+      "medida_a_avaliar_no_teravs": "Classificar usos, verificar proibições, transparência, documentação e responsabilidades",
+      "fonte_oficial": "https://digital-strategy.ec.europa.eu/en/faqs/navigating-ai-act",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "EU02",
+      "jurisdicao": "União Europeia",
+      "instrumento": "AI Act — transparência do artigo 50",
+      "natureza": "Dispositivo de regulamento",
+      "situacao_em_2026_10_30": "Regras de transparência têm aplicação e transições próprias; consultar enquadramento do sistema",
+      "gatilho_de_aplicabilidade": "Interação e geração/manipulação de conteúdo nos casos abrangidos",
+      "medida_a_avaliar_no_teravs": "Informar interação com IA; preparar marcação/divulgação de conteúdo sintético quando aplicável",
+      "fonte_oficial": "https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "EU03",
+      "jurisdicao": "União Europeia e alcance extraterritorial do GDPR",
+      "instrumento": "GDPR e orientações EDPB",
+      "natureza": "Regulamento e orientação interpretativa",
+      "situacao_em_2026_10_30": "Obrigações de proteção de dados continuam relevantes ao uso de IA",
+      "gatilho_de_aplicabilidade": "Tratamento sujeito ao GDPR segundo estabelecimento, oferta ou monitoramento e demais critérios",
+      "medida_a_avaliar_no_teravs": "Mapear fundamento, finalidade, direitos e transferência; avaliar impacto e decisões automatizadas",
+      "fonte_oficial": "https://www.edpb.europa.eu/topics/ai-and-technology/artificial-intelligence_en",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "US01",
+      "jurisdicao": "Estados Unidos — federal",
+      "instrumento": "FTC Act, especialmente seção 5",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Proíbe práticas desleais ou enganosas no âmbito da competência da FTC",
+      "gatilho_de_aplicabilidade": "Oferta, publicidade e tratamento de consumidores alcançados pela lei",
+      "medida_a_avaliar_no_teravs": "Não prometer capacidades inexistentes, certificações ou segurança absoluta",
+      "fonte_oficial": "https://www.ftc.gov/legal-library/browse/statutes/federal-trade-commission-act",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "US02",
+      "jurisdicao": "Estados Unidos — federal",
+      "instrumento": "COPPA e COPPA Rule",
+      "natureza": "Lei e regra regulatória",
+      "situacao_em_2026_10_30": "Aplicação a serviços e coleta de dados de menores conforme critérios próprios",
+      "gatilho_de_aplicabilidade": "Serviço dirigido a menores de 13 anos ou conhecimento de coleta abrangida",
+      "medida_a_avaliar_no_teravs": "Avaliar público, dados, avisos e consentimento parental verificável quando exigido",
+      "fonte_oficial": "https://www.ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "US03",
+      "jurisdicao": "Estados Unidos — Califórnia",
+      "instrumento": "CCPA/CPRA",
+      "natureza": "Legislação estadual",
+      "situacao_em_2026_10_30": "Direitos e obrigações dependem do enquadramento e das regras vigentes",
+      "gatilho_de_aplicabilidade": "Negócios e dados de consumidores alcançados pelos critérios legais",
+      "medida_a_avaliar_no_teravs": "Avaliar avisos, direitos, dados sensíveis e opções de oposição quando aplicáveis",
+      "fonte_oficial": "https://oag.ca.gov/privacy/ccpa",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "US04",
+      "jurisdicao": "Estados Unidos — Colorado",
+      "instrumento": "SB26-189 — Automated Decision-Making Technology",
+      "natureza": "Lei estadual",
+      "situacao_em_2026_10_30": "Lei sancionada em 2026; documentação de desenvolvedores prevista a partir de 01/01/2027; há disposições com outras datas",
+      "gatilho_de_aplicabilidade": "Tecnologia coberta que influencia materialmente decisões consequenciais definidas na lei",
+      "medida_a_avaliar_no_teravs": "Reavaliar antes de uso em emprego, crédito, saúde e outros domínios; documentação e revisão conforme requisitos",
+      "fonte_oficial": "https://www.leg.colorado.gov/bills/SB26-189",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "US05",
+      "jurisdicao": "Estados Unidos — cidade de Nova York",
+      "instrumento": "Local Law 144 e regras AEDT",
+      "natureza": "Lei e regras locais",
+      "situacao_em_2026_10_30": "Auditoria e avisos se aplicam a ferramentas e decisões de emprego abrangidas",
+      "gatilho_de_aplicabilidade": "Uso qualificado de ferramentas automatizadas de decisão de emprego",
+      "medida_a_avaliar_no_teravs": "Não confundir redigir currículo com decidir contratação; avaliar auditoria e avisos antes de desenvolver seleção",
+      "fonte_oficial": "https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "UK01",
+      "jurisdicao": "Reino Unido",
+      "instrumento": "UK GDPR, DPA 2018 e Data (Use and Access) Act 2025",
+      "natureza": "Leis e orientação ICO",
+      "situacao_em_2026_10_30": "ICO registra alterações de proteção de dados em vigor em junho de 2026",
+      "gatilho_de_aplicabilidade": "Tratamento e decisões abrangidos pelo regime britânico",
+      "medida_a_avaliar_no_teravs": "Usar orientação atualizada; não copiar automaticamente regras europeias antigas para decisões automatizadas",
+      "fonte_oficial": "https://ico.org.uk/about-the-ico/what-we-do/legislation-we-cover/data-use-and-access-act-2025/the-data-use-and-access-act-2025-what-does-it-mean-for-organisations/",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CA01",
+      "jurisdicao": "Canadá",
+      "instrumento": "PIPEDA e leis provinciais aplicáveis",
+      "natureza": "Leis e aplicação por autoridades",
+      "situacao_em_2026_10_30": "Autoridades federais/provinciais aplicam proteção de dados à IA; exemplo oficial de decisão em 2026",
+      "gatilho_de_aplicabilidade": "Atividade e dados alcançados por regras federais ou provinciais",
+      "medida_a_avaliar_no_teravs": "Analisar coleta, finalidade, transparência e treinamento; avaliar província e sensibilidade dos dados",
+      "fonte_oficial": "https://www.priv.gc.ca/en/opc-actions-and-decisions/investigations/investigations-into-businesses/2026/pipeda-2026-002-overview/",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CH01",
+      "jurisdicao": "Suíça",
+      "instrumento": "Federal Data Protection Act — FADP",
+      "natureza": "Lei e orientação FDPIC",
+      "situacao_em_2026_10_30": "Autoridade confirma aplicação tecnologicamente neutra ao tratamento por IA",
+      "gatilho_de_aplicabilidade": "Tratamento de dados sujeito ao regime suíço",
+      "medida_a_avaliar_no_teravs": "Avaliar transparência, segurança, direitos e transferências",
+      "fonte_oficial": "https://www.edoeb.admin.ch/en/ai-and-data-protection",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CN01",
+      "jurisdicao": "China",
+      "instrumento": "Medidas provisórias para serviços de IA generativa",
+      "natureza": "Regulamentação específica",
+      "situacao_em_2026_10_30": "Medidas publicadas em 2023; verificar normas complementares e requisitos atuais antes de operar",
+      "gatilho_de_aplicabilidade": "Oferta e operação de serviços generativos cobertos pelo regime chinês",
+      "medida_a_avaliar_no_teravs": "Avaliar obrigações do prestador, proteção de informações pessoais e regras de conteúdo; validação local necessária",
+      "fonte_oficial": "https://english.www.gov.cn/news/202307/13/content_WS64aff5b3c6d0868f4e8ddc01.html",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "KR01",
+      "jurisdicao": "Coreia do Sul",
+      "instrumento": "AI Basic Act e decreto de execução",
+      "natureza": "Lei e decreto",
+      "situacao_em_2026_10_30": "Entrada em vigor em 22/01/2026; alterações e transições devem ser conferidas",
+      "gatilho_de_aplicabilidade": "Operador e usos abrangidos; categorias de alto impacto e transparência precisam de classificação própria",
+      "medida_a_avaliar_no_teravs": "Avaliar enquadramento, comunicação e segurança; não assumir equivalência integral ao AI Act europeu",
+      "fonte_oficial": "https://www.msit.go.kr/eng/bbs/view.do?bbsSeqNo=42&mId=4&nttSeqNo=1214&sCode=eng",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "JP01",
+      "jurisdicao": "Japão",
+      "instrumento": "AI Act de promoção de pesquisa, desenvolvimento e uso de tecnologias de IA",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Gabinete informa promulgação em 04/06/2025 e aplicação integral em 01/09/2025",
+      "gatilho_de_aplicabilidade": "Estrutura legal e política de IA, cumulada com regras setoriais e de dados",
+      "medida_a_avaliar_no_teravs": "Examinar deveres aplicáveis e legislação de dados; não presumir modelo sancionatório idêntico ao europeu",
+      "fonte_oficial": "https://www8.cao.go.jp/cstp/ai/ai_act/ai_act.html",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "IN01",
+      "jurisdicao": "Índia",
+      "instrumento": "DPDP Act 2023 e DPDP Rules 2025",
+      "natureza": "Lei e regras com fases",
+      "situacao_em_2026_10_30": "Notificação de novembro de 2025 define início imediato e fases posteriores; não tratar todas as regras como já operativas",
+      "gatilho_de_aplicabilidade": "Tratamento digital abrangido pelo regime indiano",
+      "medida_a_avaliar_no_teravs": "Conferir cronograma, avisos, direitos, crianças e obrigações do responsável",
+      "fonte_oficial": "https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "SG01",
+      "jurisdicao": "Singapura",
+      "instrumento": "PDPA 2012 e orientações PDPC para IA",
+      "natureza": "Lei e diretrizes interpretativas",
+      "situacao_em_2026_10_30": "PDPA é lei; orientação de uso de dados em sistemas de IA não substitui o texto legal",
+      "gatilho_de_aplicabilidade": "Organizações e dados alcançados pelo PDPA",
+      "medida_a_avaliar_no_teravs": "Conferir finalidade, notificações, consentimento ou outra hipótese legal e governança",
+      "fonte_oficial": "https://sso.agc.gov.sg/Act/PDPA2012",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "AU01",
+      "jurisdicao": "Austrália",
+      "instrumento": "Privacy Act 1988 e orientação OAIC para IA",
+      "natureza": "Lei e orientação regulatória",
+      "situacao_em_2026_10_30": "OAIC confirma obrigações de privacidade também para uso de produtos de IA",
+      "gatilho_de_aplicabilidade": "Entidades e tratamento alcançados pelo Privacy Act e APPs",
+      "medida_a_avaliar_no_teravs": "Mapear entradas e saídas com dados pessoais; avaliar riscos e transparência",
+      "fonte_oficial": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "NZ01",
+      "jurisdicao": "Nova Zelândia",
+      "instrumento": "Privacy Act 2020 e princípios de privacidade",
+      "natureza": "Lei e orientação regulatória",
+      "situacao_em_2026_10_30": "Privacy Commissioner confirma aplicação a IA generativa",
+      "gatilho_de_aplicabilidade": "Tratamento e entidades no alcance do regime local",
+      "medida_a_avaliar_no_teravs": "Avaliar informações coletadas, finalidade, acesso/correção e riscos",
+      "fonte_oficial": "https://www.privacy.org.nz/resources-and-learning/a-z-topics/ai/",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "MX01",
+      "jurisdicao": "México",
+      "instrumento": "LFPDPPP — nova lei de 2025",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto oficial consultado identifica nova lei de 20/03/2025 e reforma de 14/11/2025",
+      "gatilho_de_aplicabilidade": "Tratamento por particulares sujeito à legislação mexicana",
+      "medida_a_avaliar_no_teravs": "Atualizar análise para texto de 2025; avaliar avisos, direitos e transferências",
+      "fonte_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "AR01",
+      "jurisdicao": "Argentina",
+      "instrumento": "Lei 25.326 — proteção de dados pessoais",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Regime oficial de proteção de dados consultado",
+      "gatilho_de_aplicabilidade": "Arquivos, registros e tratamento abrangidos pela lei",
+      "medida_a_avaliar_no_teravs": "Avaliar finalidade, segurança, direitos e transferência internacional",
+      "fonte_oficial": "https://www.argentina.gob.ar/normativa/nacional/ley-25326-64790/texto",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CL01",
+      "jurisdicao": "Chile",
+      "instrumento": "Lei 21.719 de proteção de dados",
+      "natureza": "Lei com vigência futura",
+      "situacao_em_2026_10_30": "Página oficial fixa entrada em vigor em 01/12/2026; ainda futura na data desta pesquisa",
+      "gatilho_de_aplicabilidade": "Preparação de operações que serão abrangidas; regime atual também precisa ser analisado",
+      "medida_a_avaliar_no_teravs": "Planejar transição sem apresentar a nova lei como integralmente vigente em outubro",
+      "fonte_oficial": "https://www.bcn.cl/balance-legislativo/detalle/ficha_LEY_21719_2024-12-13",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CO01",
+      "jurisdicao": "Colômbia",
+      "instrumento": "Lei 1.581/2012",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto e aplicação territorial descritos no portal oficial",
+      "gatilho_de_aplicabilidade": "Tratamento de dados alcançado pela lei colombiana",
+      "medida_a_avaliar_no_teravs": "Avaliar autorização/hipóteses legais, finalidade, direitos e segurança",
+      "fonte_oficial": "https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "CO02",
+      "jurisdicao": "Colômbia",
+      "instrumento": "Circular Externa SIC 002/2024 sobre dados em IA",
+      "natureza": "Ato/orientação de autoridade",
+      "situacao_em_2026_10_30": "Instrumento oficial publicado em 21/08/2024; interpretar junto da lei e competência da autoridade",
+      "gatilho_de_aplicabilidade": "Tratamento de dados pessoais em sistemas de IA alcançado pela supervisão",
+      "medida_a_avaliar_no_teravs": "Avaliar instruções e responsabilidades de tratamento no serviço",
+      "fonte_oficial": "https://sedeelectronica.sic.gov.co/transparencia/normativa/circular-externa-2-de-2024-de-la-superintendencia-de-industria-y-comercio-lineamientos-sobre-el-tratamiento-de-datos",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "ZA01",
+      "jurisdicao": "África do Sul",
+      "instrumento": "POPIA",
+      "natureza": "Lei e regulamentação",
+      "situacao_em_2026_10_30": "Regulador informa condições de tratamento, papéis e registros aplicáveis",
+      "gatilho_de_aplicabilidade": "Organizações e tratamento abrangidos pela legislação",
+      "medida_a_avaliar_no_teravs": "Avaliar responsável, direitos, avaliação de risco e obrigações de informação",
+      "fonte_oficial": "https://inforegulator.org.za/popia/",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "KE01",
+      "jurisdicao": "Quênia",
+      "instrumento": "Data Protection Act 2019",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto publicado no portal oficial da ODPC",
+      "gatilho_de_aplicabilidade": "Tratamento sujeito à lei e regras de registro/setor pertinentes",
+      "medida_a_avaliar_no_teravs": "Avaliar bases, direitos, segurança, transferências e eventual registro",
+      "fonte_oficial": "https://www.odpc.go.ke/wp-content/uploads/2024/02/TheDataProtectionAct__No24of2019.pdf",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "NG01",
+      "jurisdicao": "Nigéria",
+      "instrumento": "Nigeria Data Protection Act 2023",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Lei disponibilizada pela autoridade NDPC",
+      "gatilho_de_aplicabilidade": "Tratamento e agentes alcançados pelo regime nigeriano",
+      "medida_a_avaliar_no_teravs": "Avaliar bases, direitos, impactos, segurança e requisitos do controlador",
+      "fonte_oficial": "https://ndpc.gov.ng/download/nigeria-data-protection-act-2023",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "TR01",
+      "jurisdicao": "Turquia",
+      "instrumento": "Personal Data Protection Law 6698",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Texto disponibilizado pela KVKK; alterações e orientações locais exigem conferência",
+      "gatilho_de_aplicabilidade": "Tratamento coberto pelo regime turco",
+      "medida_a_avaliar_no_teravs": "Avaliar informação, bases legais, dados especiais e transferências",
+      "fonte_oficial": "https://www.kvkk.gov.tr/Icerik/6649/Personal-Data-Protection-Law",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "AE01",
+      "jurisdicao": "Emirados Árabes Unidos",
+      "instrumento": "Federal Decree Law 45/2021 — proteção de dados",
+      "natureza": "Lei federal e regimes locais distintos",
+      "situacao_em_2026_10_30": "Portal oficial descreve o regime federal; zonas financeiras têm regras próprias",
+      "gatilho_de_aplicabilidade": "Tratamento alcançado pelo regime federal ou por zona/regime específico",
+      "medida_a_avaliar_no_teravs": "Identificar estabelecimento e regime; avaliar direitos e compartilhamentos",
+      "fonte_oficial": "https://u.ae/en/about-the-uae/digital-uae/data/data-protection-laws",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "SA01",
+      "jurisdicao": "Arábia Saudita",
+      "instrumento": "Personal Data Protection Law — PDPL",
+      "natureza": "Lei e regulamentos",
+      "situacao_em_2026_10_30": "SDAIA mantém os instrumentos de proteção de dados; guias não substituem lei e regulamentos",
+      "gatilho_de_aplicabilidade": "Tratamento sujeito à PDPL e às regras complementares",
+      "medida_a_avaliar_no_teravs": "Avaliar bases, direitos, segurança e transferências; observar textos normativos corretos",
+      "fonte_oficial": "https://sdaia.gov.sa/en/SDAIA/about/Pages/RegulationsAndPolicies.aspx",
+      "consultado_em": "2026-10-30"
+    },
+    {
+      "id": "VN01",
+      "jurisdicao": "Vietnã",
+      "instrumento": "Lei de Inteligência Artificial 134/2025/QH15",
+      "natureza": "Lei",
+      "situacao_em_2026_10_30": "Portal governamental informa vigência desde 01/03/2026",
+      "gatilho_de_aplicabilidade": "Atividades e serviços cobertos pela lei vietnamita, com regras complementares",
+      "medida_a_avaliar_no_teravs": "Avaliar classificação, transparência e supervisão no contexto local",
+      "fonte_oficial": "https://en.baochinhphu.vn/viet-nams-law-on-artificial-intelligence-111260715113551787.htm",
+      "consultado_em": "2026-10-30"
+    }
+  ],
+  "controles": [
+    {
+      "id": "C01",
+      "tema": "Escopo territorial",
+      "medida_proposta": "Definir mercados, públicos e papéis antes do lançamento",
+      "fundamento_ou_contexto": "Mapa regulatório e análise de aplicabilidade",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Não há matriz final de mercados autorizados"
+    },
+    {
+      "id": "C02",
+      "tema": "Transparência de identidade",
+      "medida_proposta": "Identificar interação com IA e distinguir modelo de projeto",
+      "fundamento_ou_contexto": "AI Act quando aplicável; publicidade; diretriz interna",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Interface menciona IA; créditos e identidade original adicionados; marcação por modalidade exige avaliação"
+    },
+    {
+      "id": "C03",
+      "tema": "Autoria e licença",
+      "medida_proposta": "Identificar Luiz Otavio Valenzi Sousa e preservar direitos externos",
+      "fundamento_ou_contexto": "Legislação de software e licenças",
+      "situacao_observada": "Adicionado nesta etapa",
+      "pendencia_ou_evidencia": "config/project.json, LICENSE, AUTHORSHIP.md e inventário de terceiros"
+    },
+    {
+      "id": "C04",
+      "tema": "Bases e finalidades",
+      "medida_proposta": "Documentar finalidade e fundamento de cada operação de dados",
+      "fundamento_ou_contexto": "LGPD e regimes locais de dados",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Memória tem opt-in, mas não há inventário jurídico completo de tratamentos"
+    },
+    {
+      "id": "C05",
+      "tema": "Memória opcional",
+      "medida_proposta": "Permitir ativar e apagar memória por usuário",
+      "fundamento_ou_contexto": "Projeto e deveres de dados aplicáveis",
+      "situacao_observada": "Código parcial",
+      "pendencia_ou_evidencia": "Código e SQL existem; migração online e validação real ainda pendentes"
+    },
+    {
+      "id": "C06",
+      "tema": "Treinamento",
+      "medida_proposta": "Separar treinamento de personalização e avaliar fundamento, direitos e dados",
+      "fundamento_ou_contexto": "Proteção de dados e propriedade intelectual",
+      "situacao_observada": "Não implementado",
+      "pendencia_ou_evidencia": "Conversas não alteram pesos; não usar futuro treinamento como finalidade implícita"
+    },
+    {
+      "id": "C07",
+      "tema": "Acesso e correção",
+      "medida_proposta": "Criar atendimento a direitos de titulares conforme cada regime",
+      "fundamento_ou_contexto": "LGPD, GDPR e outros regimes",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Há listagem/exclusão de memória no código; atendimento completo não foi implantado"
+    },
+    {
+      "id": "C08",
+      "tema": "Exclusão de conta",
+      "medida_proposta": "Definir autenticação da solicitação e efeitos sobre todos os sistemas",
+      "fundamento_ou_contexto": "Proteção de dados aplicável",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Logout não equivale a apagar conta, registros e backups"
+    },
+    {
+      "id": "C09",
+      "tema": "Retenção e backups",
+      "medida_proposta": "Definir prazos, justificativas e restauração testada",
+      "fundamento_ou_contexto": "Governança de dados e segurança",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Não há política operacional completa de retenção e backups"
+    },
+    {
+      "id": "C10",
+      "tema": "Dados sensíveis",
+      "medida_proposta": "Mapear entradas sensíveis e controles adequados",
+      "fundamento_ou_contexto": "LGPD e regimes setoriais/locais",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Texto livre pode conter dados sensíveis; ausência de anexos não elimina o risco"
+    },
+    {
+      "id": "C11",
+      "tema": "Crianças e adolescentes",
+      "medida_proposta": "Definir público, avaliações e controles etários proporcionais",
+      "fundamento_ou_contexto": "ECA Digital, COPPA e regras locais quando aplicáveis",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Login por e-mail não é controle etário suficiente"
+    },
+    {
+      "id": "C12",
+      "tema": "Acessibilidade",
+      "medida_proposta": "Testar fluxos com tecnologias assistivas e usuários",
+      "fundamento_ou_contexto": "LBI e regimes aplicáveis; diretriz de acessibilidade",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Há ajustes e semântica; não existe certificação de cobertura universal"
+    },
+    {
+      "id": "C13",
+      "tema": "Decisões de alto impacto",
+      "medida_proposta": "Classificar usos e oferecer garantias aplicáveis",
+      "fundamento_ou_contexto": "LGPD art.20, GDPR e regimes locais de IA/emprego",
+      "situacao_observada": "Pendente para esses usos",
+      "pendencia_ou_evidencia": "O catálogo de profissões não autoriza decisões automáticas de contratação, crédito ou saúde"
+    },
+    {
+      "id": "C14",
+      "tema": "Supervisão profissional",
+      "medida_proposta": "Definir responsável e revisão antes de uso crítico",
+      "fundamento_ou_contexto": "Normas profissionais e setoriais",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Interface informa revisão; fluxo especializado de aprovação não foi implementado"
+    },
+    {
+      "id": "C15",
+      "tema": "Conteúdo sintético",
+      "medida_proposta": "Definir divulgação e marcação conforme modalidade e mercado",
+      "fundamento_ou_contexto": "AI Act art.50 e regras locais aplicáveis",
+      "situacao_observada": "Pendente por modalidade",
+      "pendencia_ou_evidencia": "SVG identificado como gerado na interface; não há programa completo de marcação de conteúdo"
+    },
+    {
+      "id": "C16",
+      "tema": "Direitos de imagem e voz",
+      "medida_proposta": "Exigir análise de autorização, finalidade e direitos antes de personalização",
+      "fundamento_ou_contexto": "Direitos de personalidade, dados e contratos",
+      "situacao_observada": "Capacidades não implementadas",
+      "pendencia_ou_evidencia": "Clonagem de voz e vídeo pessoal não estão disponíveis"
+    },
+    {
+      "id": "C17",
+      "tema": "Proteção contra abuso",
+      "medida_proposta": "Criar política, controles técnicos e testes de uso lesivo",
+      "fundamento_ou_contexto": "Leis penais/civis, proibições de IA e diretrizes do serviço",
+      "situacao_observada": "Pendente de programa completo",
+      "pendencia_ou_evidencia": "Documento de diretrizes não equivale a filtro testado ou certificação"
+    },
+    {
+      "id": "C18",
+      "tema": "Autenticação",
+      "medida_proposta": "Verificar sessão para acessar IA e memória",
+      "fundamento_ou_contexto": "Segurança e isolamento de dados",
+      "situacao_observada": "Implementado no código",
+      "pendencia_ou_evidencia": "API verifica identidade; dependências de operação online permanecem"
+    },
+    {
+      "id": "C19",
+      "tema": "Isolamento de dados",
+      "medida_proposta": "Aplicar e validar RLS e regras de acesso em ambiente real",
+      "fundamento_ou_contexto": "Segurança e direitos de titulares",
+      "situacao_observada": "Código e testes locais",
+      "pendencia_ou_evidencia": "Migração Supabase ainda não aplicada pelo acesso disponível"
+    },
+    {
+      "id": "C20",
+      "tema": "Segredos e fornecedores",
+      "medida_proposta": "Restringir credenciais e inventariar fornecedores",
+      "fundamento_ou_contexto": "Segurança e contratos",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Chave publishable é pública; faltam revisão operacional e contratos completos"
+    },
+    {
+      "id": "C21",
+      "tema": "Transferências internacionais",
+      "medida_proposta": "Mapear países e mecanismos de transferência aplicáveis",
+      "fundamento_ou_contexto": "LGPD, resolução ANPD 19/2024 e regimes locais",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Ter Supabase ou Render não comprova adequação das transferências"
+    },
+    {
+      "id": "C22",
+      "tema": "Incidentes",
+      "medida_proposta": "Definir triagem, registro e notificação segundo o caso",
+      "fundamento_ou_contexto": "Leis e regras de segurança/dados",
+      "situacao_observada": "Pendente",
+      "pendencia_ou_evidencia": "Não há plano operacional completo de resposta"
+    },
+    {
+      "id": "C23",
+      "tema": "Execução de código",
+      "medida_proposta": "Isolar execução, limitar permissões e verificar resultados",
+      "fundamento_ou_contexto": "Segurança e autorização de uso",
+      "situacao_observada": "Não há executor de código de usuário",
+      "pendencia_ou_evidencia": "Rascunhar código não equivale a executá-lo"
+    },
+    {
+      "id": "C24",
+      "tema": "Ações externas",
+      "medida_proposta": "Obter autorização específica e confirmar ações reais",
+      "fundamento_ou_contexto": "Diretrizes do serviço e responsabilidade",
+      "situacao_observada": "Agente executor não implementado",
+      "pendencia_ou_evidencia": "Não afirmar envio, assinatura ou pagamento sem integração e confirmação"
+    },
+    {
+      "id": "C25",
+      "tema": "Fornecedores e modelos",
+      "medida_proposta": "Inventariar versões, licenças, dados e limitações",
+      "fundamento_ou_contexto": "Contratos, propriedade intelectual e governança",
+      "situacao_observada": "Inventário inicial",
+      "pendencia_ou_evidencia": "Arquivos de licença preservados; não é auditoria exaustiva do runtime ou de todos os dados"
+    },
+    {
+      "id": "C26",
+      "tema": "Alegações comerciais",
+      "medida_proposta": "Evitar promessa de funcionamento absoluto ou de conformidade universal",
+      "fundamento_ou_contexto": "FTC Act, consumidores e transparência",
+      "situacao_observada": "Diretriz documentada",
+      "pendencia_ou_evidencia": "Pesquisa não valida operação em todos os países nem todos os serviços"
+    },
+    {
+      "id": "C27",
+      "tema": "Avaliação e mudança",
+      "medida_proposta": "Manter avaliações e revisão ao mudar modelo ou finalidade",
+      "fundamento_ou_contexto": "Gestão de risco e regimes de IA aplicáveis",
+      "situacao_observada": "Parcial",
+      "pendencia_ou_evidencia": "Há testes funcionais; faltam avaliações completas de segurança, viés e impacto"
+    },
+    {
+      "id": "C28",
+      "tema": "Revisão normativa",
+      "medida_proposta": "Atualizar fontes e distinguir projeto, lei e transição",
+      "fundamento_ou_contexto": "Governança de conformidade",
+      "situacao_observada": "Pesquisa datada",
+      "pendencia_ou_evidencia": "Não há monitoramento jurídico automático implantado"
+    }
+  ]
+}

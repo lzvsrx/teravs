@@ -20,7 +20,7 @@ export async function createApp({ store, cloudAccess, engine = generate, allowed
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
     const json = (code, value) => { if (!res.destroyed) { res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(value)); } };
     const route = new URL(req.url, 'http://localhost').pathname;
-    if (route === '/api/health' && req.method === 'GET') { json(200, { service: 'Teravs', version: '0.3.0', capabilities, storage: cloud ? 'supabase+local' : store.kind, learning: 'explicit-user-memory' }); return; }
+    if (route === '/api/health' && req.method === 'GET') { json(200, { service: 'Teravs', version: '0.3.1', capabilities, storage: cloud ? 'supabase+local' : store.kind, learning: 'explicit-user-memory' }); return; }
     const token = /^Bearer ([a-z0-9._~-]{1,8192})$/i.exec(req.headers.authorization || '')?.[1];
     if (!token) { json(401, { error: 'Sessão inválida. Reabra o aplicativo.' }); return; }
     let owner, requestStore = store;

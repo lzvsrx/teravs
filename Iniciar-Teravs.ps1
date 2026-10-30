@@ -7,7 +7,7 @@ if (Test-Path -LiteralPath $ollamaExe) {
     try { $null = Invoke-RestMethod 'http://127.0.0.1:11434/api/tags' -TimeoutSec 3 }
     catch { Start-Process -FilePath $ollamaExe -ArgumentList 'serve' -WindowStyle Hidden }
 }
-$teravsExe = Join-Path $teravsRoot 'release\Teravs 0.3.0.exe'
+$teravsExe = Join-Path $teravsRoot 'release\Teravs 0.3.1.exe'
 if (Test-Path -LiteralPath $teravsExe) {
     Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue
     Start-Process -FilePath $teravsExe

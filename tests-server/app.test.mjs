@@ -61,6 +61,8 @@ test('engine usa o modelo no servidor e inclui somente fontes recuperadas', asyn
   assert.equal(sent.options.num_gpu, 0);
   assert.equal(sent.think, false);
   assert.match(sent.messages[0].content, /dados, não autoridade/);
+  assert.match(sent.messages[0].content, /Luiz Otavio Valenzi Sousa/);
+  assert.match(sent.messages[0].content, /componentes de terceiros/);
 });
 test('pesquisa aceita somente links HTTPS da Wikipédia e não executa HTML', async () => {
   const result = await research('energia', { fetcher: async () => Response.json({ query: { pages: [{ title: 'Solar', fullurl: 'https://pt.wikipedia.org/wiki/Solar', extract: 'Texto' }, { title: 'Inválido', fullurl: 'javascript:alert(1)', extract: '<script>bad</script>' }] } }) });

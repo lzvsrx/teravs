@@ -4,6 +4,7 @@ async function openApp(page:Page){
  const jwt=['eyJhbGciOiJIUzI1NiJ9',Buffer.from(JSON.stringify({sub:uid,exp:Math.floor(Date.now()/1000)+3600})).toString('base64url'),'test'].join('.');
  await page.route('**/auth/v1/token?grant_type=password',route=>route.fulfill({json:{access_token:jwt,refresh_token:'fake-refresh',expires_in:3600,token_type:'bearer',user:{id:uid,email:'app@example.invalid',aud:'authenticated',role:'authenticated'}}}));
  await page.goto('/');await expect(page.locator('#account-status')).toContainText('Entre ou crie');
+ await expect(page.locator('#auth-gate .project-credits')).toContainText('Luiz Otavio Valenzi Sousa');
  await page.locator('#account-email').fill('app@example.invalid');await page.locator('#account-password').fill('testing-password');await page.locator('#account-login').click();
  await expect(page.locator('#auth-gate')).toBeHidden();
 }

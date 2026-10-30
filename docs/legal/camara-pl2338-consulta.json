@@ -1,0 +1,22 @@
+{
+  "consultadoEm": "2026-10-30",
+  "fonte": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2487262",
+  "httpStatus": 200,
+  "id": 2487262,
+  "status": {
+    "dataHora": "2026-10-27T18:14",
+    "sequencia": 417,
+    "siglaOrgao": "MESA",
+    "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/4",
+    "uriUltimoRelator": "https://dadosabertos.camara.leg.br/api/v2/deputados/160527",
+    "regime": "Prioridade (Art. 151, II, RICD)",
+    "descricaoTramitacao": "Notificação de Apensação",
+    "codTipoTramitacao": "504",
+    "descricaoSituacao": "Aguardando Parecer",
+    "codSituacao": 915,
+    "despacho": "Apensação da proposição PL 3560/2026 à proposição PL 728/2026.",
+    "url": "https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=3173183",
+    "ambito": "Regimental",
+    "apreciacao": "Proposição Sujeita à Apreciação do Plenário"
+  }
+}

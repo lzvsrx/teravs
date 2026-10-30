@@ -1,6 +1,6 @@
 {
   "name": "teravs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Teravs — assistente inclusivo com estúdio criativo e memória controlável",
   "main": "electron/main.cjs",
   "scripts": {
@@ -19,7 +19,7 @@
     "node": ">=24"
   },
   "keywords": [],
-  "author": "Teravs",
+  "author": "Luiz Otavio Valenzi Sousa",
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
@@ -40,6 +40,7 @@
     "vite": "^8.3.5"
   },
   "build": {
+    "copyright": "Copyright © 2026 Luiz Otavio Valenzi Sousa",
     "appId": "com.teravs.desktop",
     "productName": "Teravs",
     "directories": {
@@ -50,6 +51,10 @@
       "electron/**/*",
       "server/**/*",
       "config/**/*",
+      "LICENSE",
+      "AUTHORSHIP.md",
+      "THIRD_PARTY_NOTICES.md",
+      "docs/legal/third-party/**/*",
       "package.json"
     ],
     "win": {

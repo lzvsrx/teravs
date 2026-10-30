@@ -2,6 +2,7 @@ import './style.css';
 import './studio.css';
 import { cloudToken, cloudMemory } from './cloud';
 import { mountAccount } from './account';
+import { mountCredits } from './credits';
 type Message={role:'user'|'assistant';content:string;mode?:string;sources?:{title:string;url:string}[]};
 const $=<T extends HTMLElement>(s:string)=>document.querySelector<T>(s)!;
 const read=<T>(key:string,fallback:T):T=>{try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch{return fallback}};
@@ -83,3 +84,4 @@ mountAccount(session=>{
  if(next!==historyOwner){controller?.abort();localStorage.setItem(historyKey(),JSON.stringify(messages));historyOwner=next;messages=read<Message[]>(historyKey(),[]);render();$('#memory-list').replaceChildren();$('#memory-status').textContent='';$<HTMLTextAreaElement>('#memory-content').value='';}
  useMemory=next?read('teravs.useMemory.'+next,false):false;$<HTMLInputElement>('#remember').checked=useMemory;
 });
+mountCredits();
