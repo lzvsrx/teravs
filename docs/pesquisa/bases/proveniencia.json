@@ -1,0 +1,44 @@
+{
+  "retrieved_on": "2026-10-30",
+  "sources": {
+    "cbo-ocupacoes": {
+      "url": "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads/cbo2002-ocupacao.csv",
+      "resolved_url": "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads/cbo2002-ocupacao.csv",
+      "sha256": "ad6d51d5d139125b15ea746464b2a39fa832ae295cdb6aa63dc7eddf2d2bed00",
+      "bytes": 108256,
+      "source_rows_including_header": 2695,
+      "rows_including_header": 2695
+    },
+    "cbo-sinonimos": {
+      "url": "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads/cbo2002-sinonimo.csv",
+      "resolved_url": "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/cbo/servicos/downloads/cbo2002-sinonimo.csv",
+      "sha256": "d49e700161106e0da7e69083db97d0a94ec6d7feed3ab874da5a0cd175a1ace1",
+      "bytes": 296747,
+      "source_rows_including_header": 7779,
+      "rows_including_header": 7779
+    },
+    "isco-estrutura": {
+      "url": "https://www.ilo.org/ilostat-files/ISCO/newdocs-08-2021/ISCO-08/ISCO-08%20EN.csv",
+      "resolved_url": "https://webapps.ilo.org/ilostat-files/ISCO/newdocs-08-2021/ISCO-08/ISCO-08%20EN.csv",
+      "sha256": "9afc6377d6ed6738d59aa0476777042e180397400d7dcd932e084045228b4d49",
+      "bytes": 224299,
+      "source_rows_including_header": 1314,
+      "rows_including_header": 437
+    },
+    "isco-indice": {
+      "url": "https://www.ilo.org/ilostat-files/ISCO/newdocs-08-2021/ISCO-08/ISCO-08%20-88%20EN%20Index.xlsx",
+      "resolved_url": "https://webapps.ilo.org/ilostat-files/ISCO/newdocs-08-2021/ISCO-08/ISCO-08%20-88%20EN%20Index.xlsx",
+      "sha256": "f5431a319fe4bd833cb08761f9560ee0ae39023fadc1daaae6b5455b381e86fc",
+      "bytes": 208878,
+      "source_rows_including_header": 7019,
+      "rejected_rows": [
+        [
+          "1",
+          "3117",
+          "n"
+        ]
+      ],
+      "rows_including_header": 7018
+    }
+  }
+}

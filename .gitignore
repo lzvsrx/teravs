@@ -18,3 +18,4 @@ android/build/
 android/.idea/
 .qodo/
 preview*.png
+.venv-research/

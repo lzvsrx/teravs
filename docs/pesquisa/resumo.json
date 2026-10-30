@@ -1,0 +1,13 @@
+{
+  "consultado_em": "2026-10-30",
+  "servicos_catalogados": 70,
+  "areas_de_rotina": 81,
+  "documentos_sugeridos": 486,
+  "ocupacoes_cbo_no_csv_obtido": 2694,
+  "sinonimos_cbo_no_csv_obtido": 7778,
+  "grupos_isco08": 436,
+  "titulos_ingleses_isco08": 7017,
+  "sinonimos_sem_codigo_correspondente_no_csv_obtido": 0,
+  "fontes_de_referencia": 27,
+  "observacao": "Não somar bases para obter total único; existem sobreposições. A relação profissão-documento é editorial e não foi validada individualmente para todos os títulos."
+}

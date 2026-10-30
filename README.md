@@ -8,6 +8,12 @@ O aplicativo começa na tela de login. O cadastro inclui nome, e-mail, senha e c
 
 [Repositório](https://github.com/lzvsrx/teravs) · [Interface no GitHub Pages](https://lzvsrx.github.io/teravs/) · [Versões para download](https://github.com/lzvsrx/teravs/releases)
 
+## Pesquisa de serviços, profissões e documentos
+
+[Pesquisa e metodologia](docs/pesquisa/README.md) · [Planilha com filtros](docs/pesquisa/Teravs-pesquisa-servicos-profissoes.xlsx) · [Serviços](docs/pesquisa/SERVICOS.md) · [Rotinas profissionais](docs/pesquisa/ROTINAS.md).
+
+O levantamento de 30/10/2026 organiza 70 serviços, 81 áreas e 486 sugestões de documentos. Inclui bases oficiais CBO e ISCO com proveniência. As sugestões são um catálogo para evolução do produto, não obrigações oficiais por profissão nem funções já implementadas.
+
 ## O que mudou
 
 - A tela **Conectar IA** foi removida. O aplicativo usa o serviço do Teravs; configuração de infraestrutura fica com quem publica o projeto.
