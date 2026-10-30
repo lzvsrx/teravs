@@ -3,6 +3,7 @@ import './studio.css';
 import { cloudToken, cloudMemory } from './cloud';
 import { mountAccount } from './account';
 import { mountCredits } from './credits';
+import { mountLanguage, currentLanguage, t } from './i18n';
 type Message={role:'user'|'assistant';content:string;mode?:string;sources?:{title:string;url:string}[]};
 const $=<T extends HTMLElement>(s:string)=>document.querySelector<T>(s)!;
 const read=<T>(key:string,fallback:T):T=>{try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch{return fallback}};
@@ -21,14 +22,14 @@ $('#app').innerHTML=`<a class="skip" href="#prompt">Pular para a conversa</a><as
 function save(){localStorage.setItem('teravs.settings',JSON.stringify(settings));document.body.classList.toggle('large',settings.large);document.body.classList.toggle('contrast',settings.contrast)}
 function tab(id:string){document.querySelectorAll<HTMLElement>('.tab').forEach(e=>e.hidden=e.id!==id);document.querySelectorAll('nav button').forEach(e=>e.classList.toggle('active',(e as HTMLElement).dataset.tab===id))}
 function status(text:string){$('#status').textContent=text}
-function render(){const box=$('#messages');box.replaceChildren();$('.welcome').hidden=messages.length>0;for(const m of messages){const article=document.createElement('article');article.className=m.role;const label=document.createElement('strong');label.textContent=m.role==='user'?'Você':'✦ Teravs';const text=document.createElement('p');text.textContent=m.content;article.append(label,text);if(m.role==='assistant'){const b=document.createElement('button');b.textContent='Ouvir resposta';b.onclick=()=>{if(!('speechSynthesis' in window)){status('Leitura em voz alta indisponível.');return}speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(m.content);utterance.lang='pt-BR';speechSynthesis.speak(utterance)};article.append(b)}if(m.role==='assistant')decorate(article,m);box.append(article)}localStorage.setItem(historyKey(),JSON.stringify(messages));}
+function render(){const box=$('#messages');box.replaceChildren();$('.welcome').hidden=messages.length>0;for(const m of messages){const article=document.createElement('article');article.className=m.role;const label=document.createElement('strong');label.textContent=m.role==='user'?'Você':'✦ Teravs';const text=document.createElement('p');text.textContent=m.content;article.append(label,text);if(m.role==='assistant'){const b=document.createElement('button');b.textContent='Ouvir resposta';b.onclick=()=>{if(!('speechSynthesis' in window)){status('Leitura em voz alta indisponível.');return}speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(m.content);utterance.lang=currentLanguage();speechSynthesis.speak(utterance)};article.append(b)}if(m.role==='assistant')decorate(article,m);box.append(article)}localStorage.setItem(historyKey(),JSON.stringify(messages));}
 async function send(){
  const input=$<HTMLTextAreaElement>('#prompt');const content=input.value.trim();if(!content||busy)return;
  busy=true;controller=new AbortController();$('#stop').hidden=false;$<HTMLButtonElement>('#send').disabled=true;
  const responseOwner=historyOwner;const mode=$<HTMLSelectElement>('#mode').value;messages.push({role:'user',content});input.value='';render();
  status(mode==='research'?'Pesquisando na Wikipédia e preparando a resposta…':'Teravs está criando…');
  const timeout=setTimeout(()=>controller?.abort(),185000);
- try{const data=await api('/chat',{method:'POST',body:JSON.stringify({messages:messages.slice(-20).map(({role,content})=>({role,content})),mode,simple:settings.simple,useMemory}),signal:controller.signal});
+ try{const data=await api('/chat',{method:'POST',body:JSON.stringify({messages:messages.slice(-20).map(({role,content})=>({role,content})),mode,simple:settings.simple,useMemory,language:currentLanguage()}),signal:controller.signal});
  if(responseOwner!==historyOwner)return;
  if(typeof data.content!=='string'||!data.content.trim())throw Error('O serviço não retornou conteúdo.');
  messages.push({role:'assistant',content:data.content,mode,sources:data.sources});render();status('Criação concluída.');
@@ -36,10 +37,10 @@ async function send(){
  }catch(error){status(error instanceof Error&&error.name==='AbortError'?'Solicitação interrompida ou tempo limite atingido.':error instanceof TypeError?'Não foi possível alcançar o serviço do Teravs. Tente novamente mais tarde.':error instanceof Error?error.message:'Não foi possível concluir.');}
  finally{clearTimeout(timeout);busy=false;$('#stop').hidden=true;$<HTMLButtonElement>('#send').disabled=false}
 }
-document.querySelectorAll<HTMLElement>('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab!));document.querySelectorAll<HTMLElement>('[data-prompt]').forEach(b=>b.onclick=()=>{$<HTMLTextAreaElement>('#prompt').value=b.dataset.prompt!;$('#prompt').focus()});$('#composer').onsubmit=e=>{e.preventDefault();void send()};$('#stop').onclick=()=>controller?.abort();$('#new').onclick=()=>{if(busy)return;messages=[];render();tab('chat');$('#prompt').focus()};$('#clear').onclick=()=>{if(busy)return;if(confirm('Apagar todo o histórico salvo neste dispositivo?')){messages=[];render()}};
+document.querySelectorAll<HTMLElement>('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab!));document.querySelectorAll<HTMLElement>('[data-prompt]').forEach(b=>b.onclick=()=>{$<HTMLTextAreaElement>('#prompt').value=b.dataset.prompt!;$('#prompt').focus()});$('#composer').onsubmit=e=>{e.preventDefault();void send()};$('#stop').onclick=()=>controller?.abort();$('#new').onclick=()=>{if(busy)return;messages=[];render();tab('chat');$('#prompt').focus()};$('#clear').onclick=()=>{if(busy)return;if(confirm(t('Apagar todo o histórico salvo neste dispositivo?'))){messages=[];render()}};
 for(const name of ['large','contrast','simple'] as const){const el=$<HTMLInputElement>('#'+name);el.checked=settings[name];el.onchange=()=>{settings[name]=el.checked;save()}}
-$('#job-start').onclick=()=>{const job=$<HTMLInputElement>('#job').value.trim();$<HTMLTextAreaElement>('#prompt').value=`Minha área é ${$<HTMLSelectElement>('#profession').value}. ${job?`Minha profissão e objetivo: ${job}.`:''} Ajude-me a identificar tarefas em que você pode apoiar e proponha próximos passos. Pergunte o contexto necessário.`;tab('chat');$('#prompt').focus()};$('#export').onclick=()=>{const blob=new Blob([messages.map(m=>`${m.role==='user'?'Você':'Teravs'}\n${m.content}`).join('\n\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='teravs-conversa.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('#silence').onclick=()=>window.speechSynthesis?.cancel();
-$('#mic').onclick=()=>{const Speech=(window as any).SpeechRecognition||(window as any).webkitSpeechRecognition;if(!Speech){status('Ditado indisponível neste dispositivo. Use o ditado do teclado do sistema.');return}const recognition=new Speech();recognition.lang='pt-BR';recognition.onresult=(event:any)=>{$<HTMLTextAreaElement>('#prompt').value+=event.results[0][0].transcript;status('Ditado concluído. Revise antes de enviar.')};recognition.onerror=()=>status('Não foi possível usar o microfone. Verifique a permissão.');recognition.start();status('Ouvindo…')};save();render();
+$('#job-start').onclick=()=>{const job=$<HTMLInputElement>('#job').value.trim();$<HTMLTextAreaElement>('#prompt').value=t('Minha área é {area}. Minha profissão e objetivo: {job}. Ajude-me a identificar tarefas em que você pode apoiar e proponha próximos passos. Pergunte o contexto necessário.',{area:$<HTMLSelectElement>('#profession').selectedOptions[0].textContent||'',job});tab('chat');$('#prompt').focus()};$('#export').onclick=()=>{const blob=new Blob([messages.map(m=>`${m.role==='user'?t('Você'):'Teravs'}\n${m.content}`).join('\n\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='teravs-conversa.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('#silence').onclick=()=>window.speechSynthesis?.cancel();
+$('#mic').onclick=()=>{const Speech=(window as any).SpeechRecognition||(window as any).webkitSpeechRecognition;if(!Speech){status('Ditado indisponível neste dispositivo. Use o ditado do teclado do sistema.');return}const recognition=new Speech();recognition.lang=currentLanguage();recognition.onresult=(event:any)=>{$<HTMLTextAreaElement>('#prompt').value+=event.results[0][0].transcript;status('Ditado concluído. Revise antes de enviar.')};recognition.onerror=()=>status('Não foi possível usar o microfone. Verifique a permissão.');recognition.start();status('Ouvindo…')};save();render();
 
 async function api(path:string,init:RequestInit={}){
  if(path.startsWith('/memories'))return cloudMemory(path,init);
@@ -72,7 +73,7 @@ $<HTMLInputElement>('#remember').checked=useMemory;
 $('#remember').onchange=()=>{useMemory=$<HTMLInputElement>('#remember').checked;localStorage.setItem('teravs.useMemory.'+(historyOwner||'guest'),JSON.stringify(useMemory))};
 $('#save-memory').onclick=async()=>{const content=$<HTMLTextAreaElement>('#memory-content').value.trim();if(!content)return;if(!useMemory){$('#memory-status').textContent='Ative a permissão de memória antes de salvar.';return}try{await api('/memories',{method:'POST',body:JSON.stringify({content,consent:true})});$<HTMLTextAreaElement>('#memory-content').value='';await refreshMemory()}catch(error){$('#memory-status').textContent=error instanceof Error?error.message:'Não foi possível salvar. Confira o serviço e o limite de memórias.'}};
 $('#refresh-memory').onclick=()=>void refreshMemory();
-$('#delete-memory').onclick=async()=>{if(!confirm('Apagar permanentemente todas as memórias desta sessão?'))return;try{await api('/memories',{method:'DELETE'});await refreshMemory()}catch{$('#memory-status').textContent='Não foi possível apagar. Tente novamente.'}};
+$('#delete-memory').onclick=async()=>{if(!confirm(t('Apagar permanentemente todas as memórias desta sessão?')))return;try{await api('/memories',{method:'DELETE'});await refreshMemory()}catch{$('#memory-status').textContent='Não foi possível apagar. Tente novamente.'}};
 document.querySelectorAll<HTMLElement>('[data-create]').forEach(b=>b.onclick=()=>{$<HTMLSelectElement>('#mode').value=b.dataset.create!;tab('chat');$('#prompt').focus()});
 document.querySelector<HTMLElement>('[data-tab="memory"]')!.onclick=()=>{tab('memory');void refreshMemory()};
 if(location.hostname.endsWith('github.io')&&!import.meta.env.VITE_TERAVS_API_URL)status('O Teravs online ainda está em preparação. Use o aplicativo Windows para conversar.');
@@ -85,3 +86,8 @@ mountAccount(session=>{
  useMemory=next?read('teravs.useMemory.'+next,false):false;$<HTMLInputElement>('#remember').checked=useMemory;
 });
 mountCredits();
+mountLanguage();
+document.addEventListener('teravs-language-change', () => {
+ window.speechSynthesis?.cancel();
+ document.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(input => input.setCustomValidity(''));
+});

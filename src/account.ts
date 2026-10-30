@@ -1,6 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { cloud } from './cloud';
 import './account.css';
+import { t } from './i18n';
 
 const REDIRECT = 'https://lzvsrx.github.io/teravs/';
 const callback = new URLSearchParams(location.hash.slice(1));
@@ -43,7 +44,7 @@ export function mountAccount(onSession: (session: Session | null) => void) {
     try { await action(); } catch (error) { note(failure(error)); }
     finally { working = false; gate.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.disabled = false); }
   }
-  function match(first: string, second: string) { const field = el<HTMLInputElement>(second); field.setCustomValidity(el<HTMLInputElement>(first).value === field.value ? '' : 'As senhas precisam ser iguais.'); return field.reportValidity(); }
+  function match(first: string, second: string) { const field = el<HTMLInputElement>(second); field.setCustomValidity(el<HTMLInputElement>(first).value === field.value ? '' : t('As senhas precisam ser iguais.')); return field.reportValidity(); }
   gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(input => input.oninput = () => { gate.querySelectorAll<HTMLInputElement>('input[type=password]').forEach(e => e.setCustomValidity('')); });
   gate.querySelectorAll<HTMLElement>('[data-auth-go]').forEach(button => button.onclick = () => view(button.dataset.authGo!));
   el<HTMLFormElement>('#account-form').onsubmit = event => { event.preventDefault(); void run(async () => {

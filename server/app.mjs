@@ -68,7 +68,8 @@ export async function createApp({ store, cloudAccess, engine = generate, allowed
         const timeout = setTimeout(() => controller.abort(), 180000);
         res.on('close', () => { if (!res.writableEnded) controller.abort(); });
         try {
-          const result = await engine({ messages: input.messages.map(({ role, content }) => ({ role, content })), mode: input.mode || 'chat', simple: input.simple === true, memories: input.useMemory === true ? await requestStore.list(owner) : [], signal: controller.signal });
+          const language = typeof input.language === 'string' && /^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8}){0,2}$/.test(input.language) ? input.language : 'pt-BR';
+          const result = await engine({ messages: input.messages.map(({ role, content }) => ({ role, content })), mode: input.mode || 'chat', language, simple: input.simple === true, memories: input.useMemory === true ? await requestStore.list(owner) : [], signal: controller.signal });
           json(200, result);
         } finally { clearTimeout(timeout); active--; }
         return;

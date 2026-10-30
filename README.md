@@ -62,6 +62,10 @@ O histórico da interface fica no dispositivo, separado por conta. A memória on
 
 Memórias autorizadas e o histórico da conversa são enviados ao motor para responder. O login permite acessar memórias em aparelhos diferentes, depois de aplicar as regras do banco. Sair remove as informações da tela e preserva o histórico local da conta para o próximo login nesse dispositivo. Não há importação automática de dados anteriores de convidados. O SDK guarda a sessão; a senha não é salva pelo código do Teravs. Configurações publishable são públicas; credenciais administrativas nunca entram no aplicativo ou no Git.
 
+## Idiomas
+
+Use o seletor 🌐 Idioma, disponível também no login. Português, inglês, espanhol, francês, árabe e chinês simplificado têm catálogos incluídos. A preferência fica salva no aparelho. Outros idiomas podem usar tradução no próprio dispositivo quando o navegador oferecer suporte; não há garantia de todas as línguas existentes. Veja a cobertura, privacidade e limites em [docs/IDIOMAS.md](docs/IDIOMAS.md).
+
 ## Limites reais
 
 O código do aplicativo e do serviço é do projeto. O modelo de linguagem atual é **Qwen3 4B via Ollama**, não um modelo treinado do zero. Memória não altera pesos e não significa aprendizado global de todas as conversas. O projeto não oferece geração de fotos realistas, vídeos, música, Libras ou automação de tarefas externas. Ilustrações SVG são desenhos gerados por código. Texto de código é exibido e exportado, nunca executado automaticamente.

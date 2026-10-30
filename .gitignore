@@ -19,3 +19,4 @@ android/.idea/
 .qodo/
 preview*.png
 .venv-research/
+supabase/.temp/
