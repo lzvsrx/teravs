@@ -1,6 +1,7 @@
 import './style.css';
 import './studio.css';
-import { cloud, cloudToken, cloudMemory } from './cloud';
+import { cloudToken, cloudMemory } from './cloud';
+import { mountAccount } from './account';
 type Message={role:'user'|'assistant';content:string;mode?:string;sources?:{title:string;url:string}[]};
 const $=<T extends HTMLElement>(s:string)=>document.querySelector<T>(s)!;
 const read=<T>(key:string,fallback:T):T=>{try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch{return fallback}};
@@ -75,30 +76,10 @@ document.querySelectorAll<HTMLElement>('[data-create]').forEach(b=>b.onclick=()=
 document.querySelector<HTMLElement>('[data-tab="memory"]')!.onclick=()=>{tab('memory');void refreshMemory()};
 if(location.hostname.endsWith('github.io')&&!import.meta.env.VITE_TERAVS_API_URL)status('O Teravs online ainda está em preparação. Use o aplicativo Windows para conversar.');
 
-const accountButton=document.createElement('button');accountButton.dataset.tab='account';accountButton.textContent='◎ Minha conta';accountButton.onclick=()=>tab('account');$('nav').append(accountButton);
-const accountSection=document.createElement('section');accountSection.id='account';accountSection.className='tab';accountSection.hidden=true;
-accountSection.innerHTML=`<span class="eyebrow">SUAS MEMÓRIAS, COM VOCÊ</span><h1>Sua conta Teravs.</h1><p>Entre para acessar suas memórias em diferentes aparelhos. O histórico visível continua separado por conta neste dispositivo.</p><p id="account-status" role="status">Verificando sua conta…</p><form id="account-form"><label for="account-email">E-mail</label><input id="account-email" type="email" autocomplete="email" required maxlength="254"><label for="account-password">Senha</label><input id="account-password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"><button class="primary" id="account-login">Entrar</button><button type="button" id="account-signup">Criar conta</button></form><button id="account-logout" hidden>Sair desta conta</button><div class="notice"><strong>Memória online</strong><p id="cloud-detail">A configuração do aplicativo está pronta. O banco precisa ter a tabela e as regras de privacidade do Teravs. Criar conta não ativa o salvamento automático: você decide em Minha memória.</p><a href="https://pzrzemrnmexgncmciofy.supabase.co" target="_blank" rel="noopener noreferrer">Serviço Supabase do Teravs</a></div>`;
-$('main').append(accountSection);
+
 $('#memory .notice p').textContent='Com uma conta, as memórias autorizadas ficam no Supabase e podem ser acessadas em outros aparelhos. O histórico visível fica neste dispositivo, separado por conta. Sair não apaga suas memórias: use o botão de exclusão quando desejar.';
-cloud.auth.onAuthStateChange((_event,session)=>{
+mountAccount(session=>{
  const next=session?.user.id||null;
  if(next!==historyOwner){controller?.abort();localStorage.setItem(historyKey(),JSON.stringify(messages));historyOwner=next;messages=read<Message[]>(historyKey(),[]);render();$('#memory-list').replaceChildren();$('#memory-status').textContent='';$<HTMLTextAreaElement>('#memory-content').value='';}
  useMemory=next?read('teravs.useMemory.'+next,false):false;$<HTMLInputElement>('#remember').checked=useMemory;
- $('#account-status').textContent=session?'Você entrou como '+session.user.email+'.':'Entre ou crie sua conta para usar a memória online.';
- $('#account-form').hidden=!!session;$('#account-logout').hidden=!session;
- $<HTMLInputElement>('#account-password').value='';
 });
-let authBusy=false;
-async function authenticate(signup=false){
- if(authBusy||!$<HTMLFormElement>('#account-form').reportValidity())return;authBusy=true;
- $<HTMLButtonElement>('#account-login').disabled=true;$<HTMLButtonElement>('#account-signup').disabled=true;$('#account-status').textContent=signup?'Criando sua conta…':'Entrando…';
- try{const email=$<HTMLInputElement>('#account-email').value.trim(),password=$<HTMLInputElement>('#account-password').value;
- const result=signup?await cloud.auth.signUp({email,password,options:{emailRedirectTo:'https://lzvsrx.github.io/teravs/'}}):await cloud.auth.signInWithPassword({email,password});
- if(result.error)throw result.error;
- if(signup&&!result.data.session)$('#account-status').textContent='Confira seu e-mail para confirmar o cadastro. Depois volte e entre com sua senha.';
- $<HTMLInputElement>('#account-password').value='';
- }catch{$('#account-status').textContent=signup?'Não foi possível criar a conta. Verifique os dados e tente novamente.':'Não foi possível entrar. Confira e-mail, senha e a confirmação do cadastro.'}
- finally{authBusy=false;$<HTMLButtonElement>('#account-login').disabled=false;$<HTMLButtonElement>('#account-signup').disabled=false}
-}
-$('#account-form').onsubmit=e=>{e.preventDefault();void authenticate()};$('#account-signup').onclick=()=>void authenticate(true);
-$('#account-logout').onclick=async()=>{controller?.abort();const {error}=await cloud.auth.signOut({scope:'local'});if(error)$('#account-status').textContent='Não foi possível sair. Tente novamente.'};

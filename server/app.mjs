@@ -32,7 +32,7 @@ export async function createApp({ store, cloudAccess, engine = generate, allowed
       owner = access.owner; requestStore = access.store;
     }
     const guest = /^[a-f0-9]{64}$/i.test(token);
-    if (cloud && guest && route.startsWith('/api/memories')) { json(401, { error: 'Entre na sua conta para acessar as memórias online.' }); return; }
+    if (cloud && guest && (route.startsWith('/api/memories') || route === '/api/chat')) { json(401, { error: 'Entre na sua conta para usar o Teravs.' }); return; }
     const now = Date.now();
     // Bound both memory consumption and per-session request volume.
     for (const [key, value] of rates) if (now - value.since > 60000) rates.delete(key);

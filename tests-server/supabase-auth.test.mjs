@@ -23,6 +23,8 @@ test('API usa a identidade verificada e rejeita JWT forjado, sem confiar no user
   t.after(() => app.close());
   const url = `http://127.0.0.1:${app.server.address().port}/api/memories`;
   assert.equal((await fetch(url, { headers: { Authorization: 'Bearer forged.jwt.signature' } })).status, 401);
+  assert.equal((await fetch(url, { headers: { Authorization: 'Bearer '+'a'.repeat(64) } })).status, 401);
+  assert.equal((await fetch(url.replace('/memories','/chat'), {method:'POST',headers:{Authorization:'Bearer '+'a'.repeat(64),'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'Bypass'}]})})).status,401);
   assert.equal((await fetch(url + '?user_id=someone-else', { headers: { Authorization: 'Bearer good.jwt.signature' } })).status, 200);
   assert.deepEqual(received, ['verified-owner']);
 });

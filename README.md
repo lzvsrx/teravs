@@ -4,6 +4,8 @@ Assistente inclusivo para Windows, Android e web. Elo, uma órbita turquesa, é 
 
 Integração Supabase preparada com login por e-mail e senha e memória por usuário. A URL e a chave pública foram verificadas; a tabela online ainda precisa receber a [migração SQL](supabase/migrations/202610300001_teravs_memories.sql). Veja [a configuração do projeto Supabase](docs/SUPABASE.md).
 
+O aplicativo começa na tela de login. O cadastro inclui nome, e-mail, senha e confirmação; há telas de confirmação de e-mail e recuperação/alteração de senha. A IA exige uma sessão válida, verificada também na API. Sair bloqueia novamente o aplicativo.
+
 [Repositório](https://github.com/lzvsrx/teravs) · [Interface no GitHub Pages](https://lzvsrx.github.io/teravs/) · [Versões para download](https://github.com/lzvsrx/teravs/releases)
 
 ## O que mudou

@@ -37,7 +37,7 @@ O `render.yaml` provisiona somente uma API Docker; o plano indicado é pago. Ele
 
 Defina `OLLAMA_URL` para um motor de inferência acessível ao serviço e `ALLOWED_ORIGINS` com origens exatas, por exemplo `https://lzvsrx.github.io,https://localhost,http://localhost`. Um servidor de nuvem não alcança o Ollama do computador por `127.0.0.1`. É necessário um destino de inferência adequado, com recursos de memória e processamento.
 
-Se usar outro projeto Supabase, configure `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` também no servidor. O JWT é validado por Supabase Auth. Leituras e gravações de nuvem são feitas com o JWT do usuário, sem chave secret para contornar RLS. Visitantes podem conversar sem memória; não podem gravar memórias online.
+Se usar outro projeto Supabase, configure `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` também no servidor. O JWT é validado por Supabase Auth. Leituras e gravações de nuvem são feitas com o JWT do usuário, sem chave secret para contornar RLS. A interface e a API exigem login para conversar ou acessar memórias. Uma chave de dispositivo antiga não substitui a conta.
 
 `/api/health` verifica que o serviço iniciou; não certifica que o modelo, o login e a tabela estão prontos. Teste cada função separadamente. O SQLite temporário do contêiner existe somente por compatibilidade local e não deve guardar memórias de produção.
 

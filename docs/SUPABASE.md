@@ -29,6 +29,8 @@ Redirect URL permitida: https://lzvsrx.github.io/teravs/
 
 O cadastro solicita confirmação por e-mail. Depois da confirmação, o usuário pode entrar no site ou no aplicativo usando e-mail e senha. Nenhuma conta de teste real foi criada e nenhum e-mail foi disparado durante os testes automáticos.
 
+O formulário inicial permite entrar, criar conta com confirmação de senha, reenviar a confirmação e recuperar a senha. O link de recuperação abre a tela para escolher e confirmar uma nova senha. Sem login, a interface fica oculta e inativa; a API rejeita requisições de convidados à IA e às memórias.
+
 ## Validar depois de aplicar
 
 Crie duas contas reais sob seu controle e confirme os e-mails. Entre na conta A, ative o consentimento em Minha memória e salve um registro. Confira que a conta B não pode ler ou excluir esse registro. Teste também o limite, exclusão e saída da conta. Não coloque dados reais sensíveis antes dessa validação do ambiente online.
