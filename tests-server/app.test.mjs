@@ -54,9 +54,10 @@ test('engine usa o modelo no servidor e inclui somente fontes recuperadas', asyn
   const output = await generate({ messages: [{ role: 'user', content: 'Energia solar' }], mode: 'research', memories: [] }, {
     model: 'test', url: 'http://127.0.0.1:11434/',
     search: async () => [{ title: 'Energia solar', url: 'https://pt.wikipedia.org/wiki/Energia_solar', excerpt: 'Fonte de energia.' }],
-    fetcher: async (url, init) => { assert.equal(url, 'http://127.0.0.1:11434/api/chat'); sent = JSON.parse(init.body); return Response.json({ message: { content: 'Resposta [1]' } }); }
+    fetcher: async (url, init) => { assert.equal(url, 'http://127.0.0.1:11434/api/chat'); sent = JSON.parse(init.body); return Response.json({ message: { content: '<think>internal</think>Resposta [1]' } }); }
   });
   assert.equal(output.sources.length, 1);
+  assert.equal(output.content, 'Resposta [1]');
   assert.equal(sent.options.num_gpu, 0);
   assert.equal(sent.think, false);
   assert.match(sent.messages[0].content, /dados, não autoridade/);

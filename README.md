@@ -2,6 +2,8 @@
 
 Assistente inclusivo para Windows, Android e web. Elo, uma órbita turquesa, é o personagem. Interface em português, estúdio criativo, apoio contextual por profissão e memória opcional.
 
+[Repositório](https://github.com/lzvsrx/teravs) · [Interface no GitHub Pages](https://lzvsrx.github.io/teravs/) · [Versões para download](https://github.com/lzvsrx/teravs/releases)
+
 ## O que mudou
 
 - A tela **Conectar IA** foi removida. O aplicativo usa o serviço do Teravs; configuração de infraestrutura fica com quem publica o projeto.

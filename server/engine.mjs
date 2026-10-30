@@ -27,7 +27,7 @@ export async function generate({ messages, mode = 'chat', simple = false, memori
   try {
     response = await fetcher(url.replace(/\/$/, '') + '/api/chat', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, signal,
-      body: JSON.stringify({ model, stream: false, think: false, options: { num_ctx: 4096, num_predict: mode === 'image' ? 1800 : 1200, num_gpu: Number(process.env.TERAVS_GPU_LAYERS || 0) }, messages: [{ role: 'system', content: system }, ...messages] })
+      body: JSON.stringify({ model, stream: false, think: false, options: { num_ctx: 4096, num_predict: mode === 'image' ? 1800 : 1200, num_gpu: Number(process.env.TERAVS_GPU_LAYERS || 0) }, messages: [{ role: 'system', content: system }, ...messages.map((m, i) => i === messages.length - 1 ? { ...m, content: m.content + '\n/no_think' } : m)] })
     });
   } catch (error) {
     if (signal?.aborted) throw error;
@@ -35,7 +35,10 @@ export async function generate({ messages, mode = 'chat', simple = false, memori
   }
   if (!response.ok) throw new Error(`O motor não conseguiu concluir a geração (HTTP ${response.status}).`);
   const data = await response.json();
-  const content = data.message?.content;
+  // Some local model templates include reasoning tags in content despite think:false.
+  // Display the final answer only; never return a partial reasoning block as an answer.
+  const raw = data.message?.content;
+  const content = typeof raw === 'string' ? raw.replace(/^[\s\S]*?<\/think>\s*/i, '').replace(/<think>[\s\S]*$/i, '').trim() : '';
   if (typeof content !== 'string' || !content.trim()) throw new Error('O motor não retornou conteúdo. Tente um pedido mais curto.');
   return { content, sources, mode };
 }
